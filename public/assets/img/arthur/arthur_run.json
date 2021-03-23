@@ -1,0 +1,439 @@
+{
+	"textures": [
+		{
+			"image": "arthur_run.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 1207,
+				"h": 1511
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "arthur_run_00019.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 381,
+						"h": 330
+					},
+					"spriteSourceSize": {
+						"x": 17,
+						"y": 33,
+						"w": 336,
+						"h": 297
+					},
+					"frame": {
+						"x": 0,
+						"y": 0,
+						"w": 336,
+						"h": 297
+					}
+				},
+				{
+					"filename": "arthur_run_00001.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 381,
+						"h": 330
+					},
+					"spriteSourceSize": {
+						"x": 25,
+						"y": 31,
+						"w": 328,
+						"h": 299
+					},
+					"frame": {
+						"x": 0,
+						"y": 297,
+						"w": 328,
+						"h": 299
+					}
+				},
+				{
+					"filename": "arthur_run_00000.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 381,
+						"h": 330
+					},
+					"spriteSourceSize": {
+						"x": 15,
+						"y": 35,
+						"w": 332,
+						"h": 295
+					},
+					"frame": {
+						"x": 328,
+						"y": 297,
+						"w": 332,
+						"h": 295
+					}
+				},
+				{
+					"filename": "arthur_run_00018.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 381,
+						"h": 330
+					},
+					"spriteSourceSize": {
+						"x": 23,
+						"y": 30,
+						"w": 327,
+						"h": 297
+					},
+					"frame": {
+						"x": 336,
+						"y": 0,
+						"w": 327,
+						"h": 297
+					}
+				},
+				{
+					"filename": "arthur_run_00002.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 381,
+						"h": 330
+					},
+					"spriteSourceSize": {
+						"x": 58,
+						"y": 23,
+						"w": 291,
+						"h": 307
+					},
+					"frame": {
+						"x": 328,
+						"y": 592,
+						"w": 291,
+						"h": 307
+					}
+				},
+				{
+					"filename": "arthur_run_00008.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 381,
+						"h": 330
+					},
+					"spriteSourceSize": {
+						"x": 38,
+						"y": 23,
+						"w": 298,
+						"h": 298
+					},
+					"frame": {
+						"x": 0,
+						"y": 596,
+						"w": 298,
+						"h": 298
+					}
+				},
+				{
+					"filename": "arthur_run_00009.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 381,
+						"h": 330
+					},
+					"spriteSourceSize": {
+						"x": 40,
+						"y": 27,
+						"w": 298,
+						"h": 292
+					},
+					"frame": {
+						"x": 619,
+						"y": 592,
+						"w": 298,
+						"h": 292
+					}
+				},
+				{
+					"filename": "arthur_run_00011.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 381,
+						"h": 330
+					},
+					"spriteSourceSize": {
+						"x": 52,
+						"y": 26,
+						"w": 286,
+						"h": 301
+					},
+					"frame": {
+						"x": 663,
+						"y": 0,
+						"w": 286,
+						"h": 301
+					}
+				},
+				{
+					"filename": "arthur_run_00010.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 381,
+						"h": 330
+					},
+					"spriteSourceSize": {
+						"x": 41,
+						"y": 28,
+						"w": 294,
+						"h": 286
+					},
+					"frame": {
+						"x": 660,
+						"y": 301,
+						"w": 294,
+						"h": 286
+					}
+				},
+				{
+					"filename": "arthur_run_00012.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 381,
+						"h": 330
+					},
+					"spriteSourceSize": {
+						"x": 75,
+						"y": 23,
+						"w": 261,
+						"h": 307
+					},
+					"frame": {
+						"x": 0,
+						"y": 894,
+						"w": 261,
+						"h": 307
+					}
+				},
+				{
+					"filename": "arthur_run_00017.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 381,
+						"h": 330
+					},
+					"spriteSourceSize": {
+						"x": 37,
+						"y": 26,
+						"w": 275,
+						"h": 290
+					},
+					"frame": {
+						"x": 619,
+						"y": 884,
+						"w": 275,
+						"h": 290
+					}
+				},
+				{
+					"filename": "arthur_run_00007.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 381,
+						"h": 330
+					},
+					"spriteSourceSize": {
+						"x": 46,
+						"y": 19,
+						"w": 271,
+						"h": 294
+					},
+					"frame": {
+						"x": 261,
+						"y": 899,
+						"w": 271,
+						"h": 294
+					}
+				},
+				{
+					"filename": "arthur_run_00016.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 381,
+						"h": 330
+					},
+					"spriteSourceSize": {
+						"x": 54,
+						"y": 22,
+						"w": 258,
+						"h": 295
+					},
+					"frame": {
+						"x": 949,
+						"y": 0,
+						"w": 258,
+						"h": 295
+					}
+				},
+				{
+					"filename": "arthur_run_00015.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 381,
+						"h": 330
+					},
+					"spriteSourceSize": {
+						"x": 63,
+						"y": 19,
+						"w": 249,
+						"h": 301
+					},
+					"frame": {
+						"x": 894,
+						"y": 884,
+						"w": 249,
+						"h": 301
+					}
+				},
+				{
+					"filename": "arthur_run_00006.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 381,
+						"h": 330
+					},
+					"spriteSourceSize": {
+						"x": 61,
+						"y": 15,
+						"w": 244,
+						"h": 303
+					},
+					"frame": {
+						"x": 954,
+						"y": 295,
+						"w": 244,
+						"h": 303
+					}
+				},
+				{
+					"filename": "arthur_run_00005.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 381,
+						"h": 330
+					},
+					"spriteSourceSize": {
+						"x": 68,
+						"y": 12,
+						"w": 238,
+						"h": 305
+					},
+					"frame": {
+						"x": 532,
+						"y": 1174,
+						"w": 238,
+						"h": 305
+					}
+				},
+				{
+					"filename": "arthur_run_00014.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 381,
+						"h": 330
+					},
+					"spriteSourceSize": {
+						"x": 81,
+						"y": 18,
+						"w": 231,
+						"h": 309
+					},
+					"frame": {
+						"x": 261,
+						"y": 1193,
+						"w": 231,
+						"h": 309
+					}
+				},
+				{
+					"filename": "arthur_run_00004.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 381,
+						"h": 330
+					},
+					"spriteSourceSize": {
+						"x": 82,
+						"y": 11,
+						"w": 224,
+						"h": 310
+					},
+					"frame": {
+						"x": 0,
+						"y": 1201,
+						"w": 224,
+						"h": 310
+					}
+				},
+				{
+					"filename": "arthur_run_00003.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 381,
+						"h": 330
+					},
+					"spriteSourceSize": {
+						"x": 103,
+						"y": 15,
+						"w": 209,
+						"h": 315
+					},
+					"frame": {
+						"x": 770,
+						"y": 1185,
+						"w": 209,
+						"h": 315
+					}
+				},
+				{
+					"filename": "arthur_run_00013.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 381,
+						"h": 330
+					},
+					"spriteSourceSize": {
+						"x": 107,
+						"y": 19,
+						"w": 208,
+						"h": 311
+					},
+					"frame": {
+						"x": 979,
+						"y": 1185,
+						"w": 208,
+						"h": 311
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "http://free-tex-packer.com",
+		"version": "0.6.6"
+	}
+}
