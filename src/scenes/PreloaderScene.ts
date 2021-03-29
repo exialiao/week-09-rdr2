@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 
+
 export default class PreloaderScene extends Phaser.Scene {
   constructor() {
     super('preloader');
@@ -37,9 +38,16 @@ export default class PreloaderScene extends Phaser.Scene {
     );
     this.load.image('arthur_shot_arm', 'assets/img/arthur/arthur_shot_arm.png');
     this.load.image('bullet', 'assets/img/arthur/bullet.png');
+    this.load.scenePlugin(
+      'WeaponPlugin',
+      'path/to/WeaponPlugin.js',
+      'weaponPlugin',
+      'weapons'
+    );
   }
 
   create() {
     this.scene.start('level-1');
+
   }
 }

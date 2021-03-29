@@ -10,8 +10,8 @@ const config = {
   physics: {
     default: 'arcade',
     arcade: {
-      gravity: { y: 300 },
-      debug: false,
+      gravity: { y: 0 },
+      debug: true,
     },
   },
   scene: [Preloader, Level1Scene],

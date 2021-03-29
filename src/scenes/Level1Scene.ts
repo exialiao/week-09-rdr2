@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { WeaponPlugin } from 'phaser3-weapon-plugin';
 
 import createArthurAnims from '../anims/Arthur';
 
@@ -8,6 +9,9 @@ export default class Level1Scene extends Phaser.Scene {
   fireLine: Phaser.GameObjects.Sprite;
   gun: Phaser.GameObjects.Sprite;
   gunTween: Phaser.Tweens.Tween;
+  gunAngle: number;
+  weapon: any;
+  arthur_run_enemy: any;
 
   constructor() {
     super('level-1');
@@ -35,6 +39,7 @@ export default class Level1Scene extends Phaser.Scene {
     createArthurAnims(this.anims);
 
     this.arthur_run = this.add.sprite(800, 995, 'arthur_run');
+
     this.arthur_run.play('arthur_run');
 
     // arthur shot
@@ -51,33 +56,70 @@ export default class Level1Scene extends Phaser.Scene {
 
     // this.points = [this.lines[0].getPointA(), { x: 550, y: 900 }];
 
-    this.fireLine = this.add.sprite(450, 870, 'fireline');
+    this.fireLine = this.add.sprite(455, 850, 'fireline');
     this.fireLine.setOrigin(0, 0);
     this.fireLine.displayWidth = 700;
     this.fireLine.displayHeight = 8;
     this.fireLine.visible = false;
     // the rotating gun
-    this.gun = this.add.sprite(450, 870, 'arthur_shot_arm');
+    this.gunAngle = 50;
+    this.gun = this.add.sprite(455, 850, 'arthur_shot_arm');
     this.gun.setOrigin(0, 0);
+    this.gun.setAngle(-(this.gunAngle / 2));
 
     this.gunTween = this.tweens.add({
       targets: [this.gun],
-      angle: 360,
-      duration: 5000,
+      angle: this.gunAngle,
+      duration: 2000,
       repeat: -1,
+      // yoyo is for reverse;
+      yoyo: true,
       callbackScope: this,
-      // onRepeat: function () {
-      //   // each round, gun angular speed decreases
-      //   this.gunTween.timeScale = Math.max(1, this.gunTween.timeScale * 0.9);
-      // },
     });
+
+    this.plugins.installScenePlugin(
+      'WeaponPlugin',
+      WeaponPlugin,
+      'weapons',
+      this
+    );
+
+    //  Creates 3 bullets, using the 'bullet' graphic
+    this.weapon = this.add.weapon(10, 'bullet');
+
+    // Enable physics debugging for the bullets
+    this.weapon.debugPhysics = true;
+
+    //  Because our bullet is drawn facing up, we need to offset its rotation:
+    this.weapon.bulletAngleOffset = 90;
+
+    //  The speed at which the bullet is fired
+    this.weapon.bulletSpeed = 3000;
+
+    //  Tell the Weapon to track the 'player' Sprite
+    this.weapon.trackSprite(this.gun, 75, 0, true);
+
+    this.arthur_run_enemy = [this.physics.add.sprite(1800, 995, 'arthur_run')];
+
+    this.physics.add.overlap(
+      this.arthur_run_enemy,
+      this.weapon.bullets,
+      (actor, bullet) => {
+
+        bullet.kill();
+      }
+    );
+
     this.input.on(
       'pointerdown',
       function () {
+        this.weapon.fireAngle = this.gun.angle;
+        this.weapon.fire();
+
         // we say we can fire when the fire line is not visible
         if (!this.fireLine.visible) {
           this.fireLine.visible = true;
-          this.fireLine.angle = this.gun.angle + 20;
+          this.fireLine.angle = this.gun.angle;
 
           this.time.addEvent({
             delay: 50,
