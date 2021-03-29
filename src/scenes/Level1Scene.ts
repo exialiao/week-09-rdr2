@@ -12,6 +12,7 @@ export default class Level1Scene extends Phaser.Scene {
   gunAngle: number;
   weapon: any;
   arthur_run_enemy: any;
+  gunTopRight: any;
 
   constructor() {
     super('level-1');
@@ -85,7 +86,7 @@ export default class Level1Scene extends Phaser.Scene {
     );
 
     //  Creates 3 bullets, using the 'bullet' graphic
-    this.weapon = this.add.weapon(10, 'bullet');
+    this.weapon = this.add.weapon(100, 'bullet');
 
     // Enable physics debugging for the bullets
     this.weapon.debugPhysics = true;
@@ -94,10 +95,12 @@ export default class Level1Scene extends Phaser.Scene {
     this.weapon.bulletAngleOffset = 90;
 
     //  The speed at which the bullet is fired
-    this.weapon.bulletSpeed = 3000;
+    this.weapon.bulletSpeed = 2000;
 
     //  Tell the Weapon to track the 'player' Sprite
-    this.weapon.trackSprite(this.gun, 75, 0, true);
+    this.gunTopRight = this.gun.getTopRight();
+
+    // this.weapon.trackSprite(this.gun, 0, 0, true);
 
     this.arthur_run_enemy = [this.physics.add.sprite(1800, 995, 'arthur_run')];
 
@@ -105,7 +108,6 @@ export default class Level1Scene extends Phaser.Scene {
       this.arthur_run_enemy,
       this.weapon.bullets,
       (actor, bullet) => {
-
         bullet.kill();
       }
     );
@@ -114,7 +116,8 @@ export default class Level1Scene extends Phaser.Scene {
       'pointerdown',
       function () {
         this.weapon.fireAngle = this.gun.angle;
-        this.weapon.fire();
+        this.gunTopRight = this.gun.getTopRight();
+        this.weapon.fire(this.gunTopRight);
 
         // we say we can fire when the fire line is not visible
         if (!this.fireLine.visible) {
@@ -137,17 +140,17 @@ export default class Level1Scene extends Phaser.Scene {
 
           // fire line disappears after 50 milliseconds
 
-          // let radians = Phaser.Math.DegToRad(this.fireLine.angle);
-          // let fireStartX = 455;
-          // let fireStartY = 800;
-          // let fireEndX = fireStartX + 800 * Math.cos(radians);
-          // let fireEndY = fireStartY + 800 * Math.sin(radians);
-          // let lineOfFire = new Phaser.Geom.Line(
-          //   fireStartX,
-          //   fireStartY,
-          //   fireEndX,
-          //   fireEndY
-          // );
+          let radians = Phaser.Math.DegToRad(this.fireLine.angle);
+          let fireStartX = 455;
+          let fireStartY = 800;
+          let fireEndX = fireStartX + 800 * Math.cos(radians);
+          let fireEndY = fireStartY + 800 * Math.sin(radians);
+          let lineOfFire = new Phaser.Geom.Line(
+            fireStartX,
+            fireStartY,
+            fireEndX,
+            fireEndY
+          );
         }
       },
       this
