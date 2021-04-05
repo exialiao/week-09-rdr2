@@ -20,6 +20,7 @@ export default class Level1Scene extends Phaser.Scene {
   enemy1_gunTopLeft: any;
   missShotArea: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody[];
   arthur: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody[];
+  enemy1_killed: boolean;
 
   constructor() {
     super('level-1');
@@ -44,11 +45,10 @@ export default class Level1Scene extends Phaser.Scene {
     this.add.image(1580, 1150, 'ground');
 
     //arthur run
-    // createArthurAnims(this.anims);
-
-    // this.arthur_run = this.add.sprite(800, 995, 'arthur_run');
-
-    // this.arthur_run.play('arthur_run');
+    createArthurAnims(this.anims);
+    this.arthur_run = this.add.sprite(500, 995, 'arthur_run');
+    this.arthur_run.stop('arthur_run');
+    this.arthur_run.visible = false;
 
     // arthur shot
     this.arthur = [this.physics.add.sprite(500, 970, 'arthur_shot_body')];
@@ -101,6 +101,8 @@ export default class Level1Scene extends Phaser.Scene {
     // enemy
     this.enemy1 = [this.physics.add.sprite(1800, 995, 'enemy1_body')];
     this.enemy1_gun = this.add.sprite(1700, 915, 'enemy1_gun');
+
+    this.enemy1_killed = false;
     // enemy weapon
 
     this.enemy1_weapon = this.add.weapon(100, 'bullet');
@@ -123,6 +125,7 @@ export default class Level1Scene extends Phaser.Scene {
         bullet.kill();
         enemy1.setAlpha(0.5);
         this.enemy1_shot = false;
+        this.enemy1_killed = true;
       }
     );
 
@@ -178,7 +181,7 @@ export default class Level1Scene extends Phaser.Scene {
           scale: { start: 0.5, end: 2.5 },
           //tint: { start: 0xff945e, end: 0xff945e },
           speed: 20,
-          accelerationY: -300,
+          accelerationY: -500,
           angle: { min: -85, max: -95 },
           rotate: { min: -180, max: 180 },
           lifespan: { min: 1000, max: 1100 },
@@ -208,7 +211,17 @@ export default class Level1Scene extends Phaser.Scene {
     }
   }
 
+  moveForward() {
+    if (this.enemy1_killed == true) {
+      this.arthur_run.play('arthur_run');
+      this.arthur_run.visible = true;
+    }
+    this.enemy1_killed = false;
+
+  }
+
   update() {
     this.enemyFire();
+    this.moveForward();
   }
 }
