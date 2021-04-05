@@ -13,6 +13,13 @@ export default class Level1Scene extends Phaser.Scene {
   weapon: any;
   arthur_run_enemy: any;
   gunTopRight: any;
+  enemy1: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody[];
+  enemy1_shot: boolean;
+  enemy1_weapon: any;
+  enemy1_gun: Phaser.GameObjects.Sprite;
+  enemy1_gunTopLeft: any;
+  missShotArea: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody[];
+  arthur: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody[];
 
   constructor() {
     super('level-1');
@@ -37,36 +44,24 @@ export default class Level1Scene extends Phaser.Scene {
     this.add.image(1580, 1150, 'ground');
 
     //arthur run
-    createArthurAnims(this.anims);
+    // createArthurAnims(this.anims);
 
-    this.arthur_run = this.add.sprite(800, 995, 'arthur_run');
+    // this.arthur_run = this.add.sprite(800, 995, 'arthur_run');
 
-    this.arthur_run.play('arthur_run');
+    // this.arthur_run.play('arthur_run');
 
     // arthur shot
-    this.add.image(500, 970, 'arthur_shot_body');
-    // this.arthur_shot_arm = this.add.image(455, 880, 'arthur_shot_arm');
-    // this.arthur_shot_arm.setOrigin(0, 0);
+    this.arthur = [this.physics.add.sprite(500, 970, 'arthur_shot_body')];
 
-    // this.aimLine = this.add.graphics({
-    //   lineStyle: { width: 4, color: 0xaa00aa },
-    //   fillStyle: { color: 0x0000aa },
-    // });
-
-    // this.lines = [new Phaser.Geom.Line(470, 870, 680, 900)];
-
-    // this.points = [this.lines[0].getPointA(), { x: 550, y: 900 }];
-
-    this.fireLine = this.add.sprite(455, 850, 'fireline');
+    this.fireLine = this.add.sprite(455, 847, 'arthur_fireline');
     this.fireLine.setOrigin(0, 0);
-    this.fireLine.displayWidth = 700;
-    this.fireLine.displayHeight = 8;
     this.fireLine.visible = false;
     // the rotating gun
     this.gunAngle = 50;
     this.gun = this.add.sprite(455, 850, 'arthur_shot_arm');
     this.gun.setOrigin(0, 0);
     this.gun.setAngle(-(this.gunAngle / 2));
+    this.gun.visible = true;
 
     this.gunTween = this.tweens.add({
       targets: [this.gun],
@@ -85,6 +80,7 @@ export default class Level1Scene extends Phaser.Scene {
       this
     );
 
+    // Arthur weapon
     //  Creates 3 bullets, using the 'bullet' graphic
     this.weapon = this.add.weapon(100, 'bullet');
 
@@ -100,71 +96,119 @@ export default class Level1Scene extends Phaser.Scene {
     //  Tell the Weapon to track the 'player' Sprite
     this.gunTopRight = this.gun.getTopRight();
 
-    // this.weapon.trackSprite(this.gun, 0, 0, true);
+    this.weapon.bulletKillDistance = 10;
 
-    this.arthur_run_enemy = [this.physics.add.sprite(1800, 995, 'arthur_run')];
+    // enemy
+    this.enemy1 = [this.physics.add.sprite(1800, 995, 'enemy1_body')];
+    this.enemy1_gun = this.add.sprite(1700, 915, 'enemy1_gun');
+    // enemy weapon
+
+    this.enemy1_weapon = this.add.weapon(100, 'bullet');
+    this.enemy1_weapon.debugPhysics = true;
+    this.enemy1_weapon.bulletAngleOffset = 90;
+    this.enemy1_weapon.bulletSpeed = 2000;
+    this.enemy1_gunTopLeft = this.enemy1_gun.getTopLeft();
+
+    this.enemy1_shot = false;
+
+    // missshot
+    this.missShotArea = [this.physics.add.sprite(2800, 600, 'miss_area')];
+
+    // bullet overlap
 
     this.physics.add.overlap(
-      this.arthur_run_enemy,
+      this.enemy1,
       this.weapon.bullets,
-      (actor, bullet) => {
+      (enemy1, bullet) => {
         bullet.kill();
+        enemy1.setAlpha(0.5);
+        this.enemy1_shot = false;
       }
     );
 
+    this.physics.add.overlap(
+      this.missShotArea,
+      this.weapon.bullets,
+      (missShotArea, bullet) => {
+        bullet.kill();
+        missShotArea.setAlpha(0.2);
+        this.enemy1_shot = true;
+      }
+    );
+
+    this.physics.add.overlap(
+      this.arthur,
+      this.enemy1_weapon.bullets,
+      (arthur, bullet) => {
+        bullet.kill();
+        arthur.setAlpha(0.5);
+      }
+    );
+
+    // shot
     this.input.on(
       'pointerdown',
       function () {
-        this.weapon.fireAngle = this.gun.angle;
+        // arthur shot
+        this.weapon.fireAngle = this.gun.angle + 2.5;
         this.gunTopRight = this.gun.getTopRight();
-        this.weapon.fire(this.gunTopRight);
+        this.weapon.fire(this.gunTopRight, undefined, undefined, -10, 10);
+        this.gunTween.stop();
 
         // we say we can fire when the fire line is not visible
         if (!this.fireLine.visible) {
           this.fireLine.visible = true;
+
           this.fireLine.angle = this.gun.angle;
 
           this.time.addEvent({
-            delay: 50,
+            delay: 100,
             callbackScope: this,
             callback: function () {
               this.fireLine.visible = false;
             },
           });
-
-          // gun angular speed increases
-          // this.gunTween.timeScale = Math.min(
-          //   15,
-          //   this.gunTween.timeScale * 2
-          // );
-
-          // fire line disappears after 50 milliseconds
-
-          let radians = Phaser.Math.DegToRad(this.fireLine.angle);
-          let fireStartX = 455;
-          let fireStartY = 800;
-          let fireEndX = fireStartX + 800 * Math.cos(radians);
-          let fireEndY = fireStartY + 800 * Math.sin(radians);
-          let lineOfFire = new Phaser.Geom.Line(
-            fireStartX,
-            fireStartY,
-            fireEndX,
-            fireEndY
-          );
         }
+
+        // gun smoke
+        this.gun_smoke = this.add.particles('gun_smoke');
+
+        this.gun_smoke.createEmitter({
+          alpha: { start: 0.5, end: 0 },
+          scale: { start: 0.5, end: 2.5 },
+          //tint: { start: 0xff945e, end: 0xff945e },
+          speed: 20,
+          accelerationY: -300,
+          angle: { min: -85, max: -95 },
+          rotate: { min: -180, max: 180 },
+          lifespan: { min: 1000, max: 1100 },
+          blendMode: 'ADD',
+          frequency: 110,
+          maxParticles: 5,
+          x: this.gunTopRight.x,
+          y: this.gunTopRight.y,
+        });
       },
       this
     );
   }
 
+  // enemey shot
+  enemyFire() {
+    if (this.enemy1_shot == true) {
+      this.enemy1_weapon.fireAngle = -180;
+      this.enemy1_weapon.fire(
+        this.enemy1_gunTopLeft,
+        undefined,
+        undefined,
+        -1,
+        10
+      );
+      this.enemy1_shot = false;
+    }
+  }
+
   update() {
-    // fire bullet
-    // this.aimLine.clear();
-    // for (var i = 0; i < this.lines.length; i++) {
-    //   Phaser.Geom.Line.RotateAroundPoint(this.lines[i], this.points[i], 0.01);
-    //   this.aimLine.strokeLineShape(this.lines[i]);
-    //   this.aimLine.fillPointShape(this.points[i], 10);
-    //   this.arthur_shot_arm.rotation += 0.01;
-    // }
+    this.enemyFire();
   }
 }

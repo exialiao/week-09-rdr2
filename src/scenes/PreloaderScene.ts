@@ -1,6 +1,5 @@
 import Phaser from 'phaser';
 
-
 export default class PreloaderScene extends Phaser.Scene {
   constructor() {
     super('preloader');
@@ -24,6 +23,8 @@ export default class PreloaderScene extends Phaser.Scene {
     this.load.image('tree', 'assets/img/tree.png');
     this.load.image('ground', 'assets/img/ground.png');
 
+    this.load.image('miss_area', 'assets/img/miss_area.png');
+
     //arthur
 
     this.load.atlas(
@@ -37,6 +38,8 @@ export default class PreloaderScene extends Phaser.Scene {
       'assets/img/arthur/arthur_shot_body.png'
     );
     this.load.image('arthur_shot_arm', 'assets/img/arthur/arthur_shot_arm.png');
+    this.load.image('arthur_fireline', 'assets/img/arthur/arthur_fireline.png');
+    this.load.image('gun_smoke', 'assets/img/arthur/gun_smoke.png');
     this.load.image('bullet', 'assets/img/arthur/bullet.png');
     this.load.scenePlugin(
       'WeaponPlugin',
@@ -44,10 +47,13 @@ export default class PreloaderScene extends Phaser.Scene {
       'weaponPlugin',
       'weapons'
     );
+
+    // enemy
+    this.load.image('enemy1_body', 'assets/img/enemy/enemy1_body.png');
+    this.load.image('enemy1_gun', 'assets/img/enemy/enemy1_gun.png');
   }
 
   create() {
     this.scene.start('level-1');
-
   }
 }
