@@ -1,4 +1,3 @@
-import Phaser from 'phaser';
 import { Weapon } from 'phaser3-weapon-plugin';
 
 export default class Enemy extends Phaser.GameObjects.Sprite {
@@ -47,5 +46,13 @@ export default class Enemy extends Phaser.GameObjects.Sprite {
     this.weapon.fireAngle = -180;
     this.weapon.fire(this.gunTopLeft, undefined, undefined, -1, 10);
     this.can_shoot = false;
+  }
+
+  shot(enemy, bullet) {
+    bullet.kill();
+    enemy.destroy();
+    enemy.gun.destroy();
+    enemy.can_shoot = false;
+    enemy.is_killed = true;
   }
 }

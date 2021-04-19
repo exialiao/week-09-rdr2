@@ -1,4 +1,3 @@
-import Phaser from 'phaser';
 import { Weapon } from 'phaser3-weapon-plugin';
 import createArthurAnims from '../anims/Arthur';
 
@@ -12,13 +11,14 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
 
   is_killed: boolean = false;
   can_shoot: boolean = false;
-  run: Phaser.GameObjects.Sprite;
-  arthur: any;
+  // run: Phaser.GameObjects.Sprite;
+
   fireLine: any;
   gunAngle: number;
   gunTween: any;
   plugins: any;
   gunTopRight: any;
+  gun_smoke: Phaser.GameObjects.Particles.ParticleEmitterManager;
 
   constructor(scene: Phaser.Scene) {
     // super(Level1Scene, 1000, 485, config.key);
@@ -28,19 +28,21 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
     scene.physics.add.existing(this);
 
     //arthur run
-    createArthurAnims(this.anims);
-    this.run = this.scene.add.sprite(300, 500, 'arthur_run');
-    this.run.setScale(0.5);
-    this.run.visible = false;
-    this.run.play('arthur_run');
+    this.createAnims();
+
+    // this.run = this.scene.add.sprite(300, 500, 'arthur_run');
+    // this.run.setScale(0.5);
+    // this.run.visible = false;
+    // this.run.play('arthur_run');
 
     // arthur shot
-    this.arthur = this.scene.add.image(300, 485, 'arthur_shot_body');
-    this.arthur.visible = true;
+    // this.arthur = this.scene.add.image(300, 485, 'arthur_shot_body');
+    this.visible = true;
 
     this.fireLine = this.scene.add.sprite(280, 425, 'arthur_fireline');
     this.fireLine.setOrigin(0, 0);
     this.fireLine.visible = false;
+
     // the rotating gun
     this.gunAngle = 50;
     this.gun = this.scene.add.sprite(280, 425, 'arthur_shot_arm');
@@ -75,67 +77,100 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
     this.gunTopRight = this.gun.getTopRight();
 
     // shot
-    this.scene.input.on(
-      'pointerdown',
-      function () {
-        // arthur shot
-        this.weapon.fireAngle = this.gun.angle + 2.5;
-        this.gunTopRight = this.gun.getTopRight();
-        this.weapon.fire(this.gunTopRight, undefined, undefined, -10, 10);
-        this.gunTween.pause();
-
-        // we say we can fire when the fire line is not visible
-        if (!this.fireLine.visible) {
-          this.fireLine.visible = true;
-
-          this.fireLine.angle = this.gun.angle;
-
-          this.scene.time.addEvent({
-            delay: 100,
-            callbackScope: this,
-            callback: function () {
-              this.fireLine.visible = false;
-            },
-          });
-        }
-
-        // gun smoke
-        this.gun_smoke = this.scene.add.particles('gun_smoke');
-
-        this.gun_smoke.createEmitter({
-          alpha: { start: 0.5, end: 0 },
-          scale: { start: 0.5, end: 2.5 },
-          //tint: { start: 0xff945e, end: 0xff945e },
-          speed: 20,
-          accelerationY: -500,
-          angle: { min: -85, max: -95 },
-          rotate: { min: -180, max: 180 },
-          lifespan: { min: 1000, max: 1100 },
-          blendMode: 'ADD',
-          frequency: 110,
-          maxParticles: 5,
-          x: this.gunTopRight.x,
-          y: this.gunTopRight.y,
-        });
-      },
-      this
-    );
+    this.scene.input.on('pointerdown', this.fire, this);
   }
 
-  preUpdate(time, delta) {
+  preUpdate(time: number, delta: number) {
     super.preUpdate(time, delta);
-
-    this.enemyFire();
   }
 
-  // enemey shot
-  enemyFire() {
-    if (this.can_shoot != true) {
-      return;
+  createAnims() {
+    this.anims.create({
+      key: 'arthur_stand',
+      frames: [{ key: 'arthur', frame: 'arthur_shot_body' }],
+    });
+
+    this.anims.create({
+      key: 'arthur_run',
+      frames: this.anims.generateFrameNames('arthur_run', {
+        start: 0,
+        end: 19,
+        zeroPad: 5,
+        prefix: 'arthur_run_',
+        suffix: '.png',
+      }),
+      frameRate: 26,
+      repeat: -1,
+    });
+  }
+
+  fire() {
+    // arthur shot
+    this.weapon.fireAngle = this.gun.angle + 2.5;
+    this.gunTopRight = this.gun.getTopRight();
+    this.weapon.fire(this.gunTopRight, undefined, undefined, -10, 10);
+    this.gunTween.pause();
+
+    // we say we can fire when the fire line is not visible
+    if (!this.fireLine.visible) {
+      this.fireLine.visible = true;
+
+      this.fireLine.angle = this.gun.angle;
+
+      this.scene.time.addEvent({
+        delay: 100,
+        callbackScope: this,
+        callback: function () {
+          this.fireLine.visible = false;
+        },
+      });
     }
 
-    this.weapon.fireAngle = -180;
-    this.weapon.fire(this.gunTopLeft, undefined, undefined, -1, 10);
-    this.can_shoot = false;
+    // gun smoke
+    this.gun_smoke = this.scene.add.particles('gun_smoke');
+
+    this.gun_smoke.createEmitter({
+      alpha: { start: 0.5, end: 0 },
+      scale: { start: 0.5, end: 2.5 },
+      //tint: { start: 0xff945e, end: 0xff945e },
+      speed: 20,
+      accelerationY: -500,
+      angle: { min: -85, max: -95 },
+      rotate: { min: -180, max: 180 },
+      lifespan: { min: 1000, max: 1100 },
+      blendMode: 'ADD',
+      frequency: 110,
+      maxParticles: 5,
+      x: this.gunTopRight.x,
+      y: this.gunTopRight.y,
+    });
+  }
+
+  shot(arthur, bullet) {
+    bullet.kill();
+    arthur.destroy();
+    arthur.gun.setAlpha(0);
+  }
+
+  moveForward() {
+    if (this.x <= 1000) {
+      this.anims.play('arthur_run');
+      // this.visible = true;
+      this.x += 5;
+
+      // this.visible = false;
+      this.gun.visible = false;
+    } else if (this.x > 1000) {
+      this.anims.play('arthur_stand');
+      this.stop();
+      this.x = this.x;
+
+      // this.visible = true;
+      // this.visible = false;
+      this.gun.x = this.x - 20;
+      this.fireLine.x = this.gun.x;
+      this.gun.visible = true;
+      this.gunTween.play();
+    }
   }
 }
