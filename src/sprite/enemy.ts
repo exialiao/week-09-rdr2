@@ -9,8 +9,6 @@ export default class Enemy extends Phaser.GameObjects.Sprite {
   add: any;
   gunTopLeft: any;
 
-  // TODO: Do I need is_alive and is_killed?
-  is_alive: boolean = true;
   is_killed: boolean = false;
   can_shoot: boolean = false;
 
@@ -31,7 +29,6 @@ export default class Enemy extends Phaser.GameObjects.Sprite {
     this.weapon.bulletAngleOffset = 90;
     this.weapon.bulletSpeed = 2000;
 
-    // TODO: Rename to something meaningful
     this.gunTopLeft = this.gun.getTopLeft();
   }
 

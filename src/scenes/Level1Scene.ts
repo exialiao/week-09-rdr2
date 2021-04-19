@@ -3,6 +3,7 @@ import { WeaponPlugin } from 'phaser3-weapon-plugin';
 
 import createArthurAnims from '../anims/Arthur';
 import Enemy from '../sprite/enemy';
+import Arthur from '../sprite/arthur';
 
 export default class Level1Scene extends Phaser.Scene {
   gameOver = false;
@@ -15,13 +16,6 @@ export default class Level1Scene extends Phaser.Scene {
   arthur_run_enemy: any;
   gunTopRight: any;
 
-  // enemy1.can_shoot: boolean;
-  // enemy1.weapon: any;
-  // enemy1.gun: Phaser.GameObjects.Sprite;
-  // enemy1.gunTopLeft: any;
-
-  // enemy1.is_killed: boolean;
-  arthur: Phaser.Types.Physics.Arcade.ImageWithDynamicBody;
   cloud: Phaser.GameObjects.TileSprite;
   birds: Phaser.GameObjects.TileSprite;
   mountain2: Phaser.GameObjects.TileSprite;
@@ -48,6 +42,7 @@ export default class Level1Scene extends Phaser.Scene {
   ground: Phaser.Types.Physics.Arcade.ImageWithDynamicBody;
   missShotArea2: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
   enemy1: Enemy;
+  arthur: Arthur;
 
   constructor() {
     super('level-1');
@@ -104,36 +99,36 @@ export default class Level1Scene extends Phaser.Scene {
     //   .setAngle(90)
     //   .setScrollFactor(0);
 
-    //arthur run
-    createArthurAnims(this.anims);
-    this.arthur_run = this.add.sprite(300, 500, 'arthur_run');
-    this.arthur_run.setScale(0.5);
-    this.arthur_run.visible = false;
-    this.arthur_run.play('arthur_run');
+    // //arthur run
+    // createArthurAnims(this.anims);
+    // this.arthur_run = this.add.sprite(300, 500, 'arthur_run');
+    // this.arthur_run.setScale(0.5);
+    // this.arthur_run.visible = false;
+    // this.arthur_run.play('arthur_run');
 
-    // arthur shot
-    this.arthur = this.physics.add.image(300, 485, 'arthur_shot_body');
-    this.arthur.visible = true;
+    // // arthur shot
+    // this.arthur = this.physics.add.image(300, 485, 'arthur_shot_body');
+    // this.arthur.visible = true;
 
-    this.fireLine = this.add.sprite(280, 425, 'arthur_fireline');
-    this.fireLine.setOrigin(0, 0);
-    this.fireLine.visible = false;
-    // the rotating gun
-    this.gunAngle = 50;
-    this.gun = this.add.sprite(280, 425, 'arthur_shot_arm');
-    this.gun.setOrigin(0, 0);
-    this.gun.setAngle(-(this.gunAngle / 2));
-    this.gun.visible = true;
+    // this.fireLine = this.add.sprite(280, 425, 'arthur_fireline');
+    // this.fireLine.setOrigin(0, 0);
+    // this.fireLine.visible = false;
+    // // the rotating gun
+    // this.gunAngle = 50;
+    // this.gun = this.add.sprite(280, 425, 'arthur_shot_arm');
+    // this.gun.setOrigin(0, 0);
+    // this.gun.setAngle(-(this.gunAngle / 2));
+    // this.gun.visible = true;
 
-    this.gunTween = this.tweens.add({
-      targets: [this.gun],
-      angle: this.gunAngle,
-      duration: 2000,
-      repeat: -1,
-      // yoyo is for reverse;
-      yoyo: true,
-      callbackScope: this,
-    });
+    // this.gunTween = this.tweens.add({
+    //   targets: [this.gun],
+    //   angle: this.gunAngle,
+    //   duration: 2000,
+    //   repeat: -1,
+    //   // yoyo is for reverse;
+    //   yoyo: true,
+    //   callbackScope: this,
+    // });
 
     this.plugins.installScenePlugin(
       'WeaponPlugin',
@@ -142,43 +137,29 @@ export default class Level1Scene extends Phaser.Scene {
       this
     );
 
-    // Arthur weapon
-    //  Creates 3 bullets, using the 'bullet' graphic
-    this.weapon = this.add.weapon(100, 'bullet');
+    // // Arthur weapon
+    // //  Creates 3 bullets, using the 'bullet' graphic
+    // this.weapon = this.add.weapon(100, 'bullet');
 
-    // Enable physics debugging for the bullets
-    this.weapon.debugPhysics = true;
+    // // Enable physics debugging for the bullets
+    // this.weapon.debugPhysics = true;
 
-    //  Because our bullet is drawn facing up, we need to offset its rotation:
-    this.weapon.bulletAngleOffset = 90;
+    // //  Because our bullet is drawn facing up, we need to offset its rotation:
+    // this.weapon.bulletAngleOffset = 90;
 
-    //  The speed at which the bullet is fired
-    this.weapon.bulletSpeed = 2000;
+    // //  The speed at which the bullet is fired
+    // this.weapon.bulletSpeed = 2000;
 
-    //  Tell the Weapon to track the 'player' Sprite
-    this.gunTopRight = this.gun.getTopRight();
+    // //  Tell the Weapon to track the 'player' Sprite
+    // this.gunTopRight = this.gun.getTopRight();
+    this.arthur = new Arthur(this);
 
     // enemy
     this.enemy1 = new Enemy(this, 1000);
-    // this.enemy1 = [this.physics.add.sprite(1000, 485, 'enemy1_body')];
-    // this.enemy1.gun = this.add.sprite(950, 445, 'enemy1.gun');
-
-    // this.enemy1.is_killed = false;
-    // enemy weapon
-
-    // this.enemy1.weapon = this.add.weapon(100, 'bullet');
-    // this.enemy1.weapon.debugPhysics = true;
-    // this.enemy1.weapon.bulletAngleOffset = 90;
-    // this.enemy1.weapon.bulletSpeed = 2000;
-    // this.enemy1.gunTopLeft = this.enemy1.gun.getTopLeft();
-
-    // this.enemy1.can_shoot = false;
-
-    // bullet overlap
 
     this.physics.add.overlap(
       this.enemy1,
-      this.weapon.bullets,
+      this.arthur.weapon.bullets,
       (enemy1, bullet) => {
         bullet.kill();
         enemy1.destroy();
@@ -194,14 +175,14 @@ export default class Level1Scene extends Phaser.Scene {
       this.enemy1.weapon.bullets,
       (arthur, bullet) => {
         bullet.kill();
-        arthur.setAlpha(0);
+        arthur.destroy();
         this.gun.setAlpha(0);
       }
     );
 
     this.physics.add.overlap(
       this.ground,
-      this.weapon.bullets,
+      this.arthur.weapon.bullets,
       (ground, bullet) => {
         bullet.kill();
         this.enemy1.can_shoot = true;
@@ -209,7 +190,7 @@ export default class Level1Scene extends Phaser.Scene {
     );
     this.physics.add.overlap(
       this.missShotArea,
-      this.weapon.bullets,
+      this.arthur.weapon.bullets,
       (missShotArea, bullet) => {
         bullet.kill();
         this.enemy1.can_shoot = true;
@@ -225,77 +206,75 @@ export default class Level1Scene extends Phaser.Scene {
     //   }
     // );
 
-    // shot
-    this.input.on(
-      'pointerdown',
-      function () {
-        // arthur shot
-        this.weapon.fireAngle = this.gun.angle + 2.5;
-        this.gunTopRight = this.gun.getTopRight();
-        this.weapon.fire(this.gunTopRight, undefined, undefined, -10, 10);
-        this.gunTween.pause();
+    // // shot
+    // this.input.on(
+    //   'pointerdown',
+    //   function () {
+    //     // arthur shot
+    //     this.weapon.fireAngle = this.gun.angle + 2.5;
+    //     this.gunTopRight = this.gun.getTopRight();
+    //     this.weapon.fire(this.gunTopRight, undefined, undefined, -10, 10);
+    //     this.gunTween.pause();
 
-        // we say we can fire when the fire line is not visible
-        if (!this.fireLine.visible) {
-          this.fireLine.visible = true;
+    //     // we say we can fire when the fire line is not visible
+    //     if (!this.fireLine.visible) {
+    //       this.fireLine.visible = true;
 
-          this.fireLine.angle = this.gun.angle;
+    //       this.fireLine.angle = this.gun.angle;
 
-          this.time.addEvent({
-            delay: 100,
-            callbackScope: this,
-            callback: function () {
-              this.fireLine.visible = false;
-            },
-          });
-        }
+    //       this.time.addEvent({
+    //         delay: 100,
+    //         callbackScope: this,
+    //         callback: function () {
+    //           this.fireLine.visible = false;
+    //         },
+    //       });
+    //     }
 
-        // gun smoke
-        this.gun_smoke = this.add.particles('gun_smoke');
+    //     // gun smoke
+    //     this.gun_smoke = this.add.particles('gun_smoke');
 
-        this.gun_smoke.createEmitter({
-          alpha: { start: 0.5, end: 0 },
-          scale: { start: 0.5, end: 2.5 },
-          //tint: { start: 0xff945e, end: 0xff945e },
-          speed: 20,
-          accelerationY: -500,
-          angle: { min: -85, max: -95 },
-          rotate: { min: -180, max: 180 },
-          lifespan: { min: 1000, max: 1100 },
-          blendMode: 'ADD',
-          frequency: 110,
-          maxParticles: 5,
-          x: this.gunTopRight.x,
-          y: this.gunTopRight.y,
-        });
-      },
-      this
-    );
+    //     this.gun_smoke.createEmitter({
+    //       alpha: { start: 0.5, end: 0 },
+    //       scale: { start: 0.5, end: 2.5 },
+    //       //tint: { start: 0xff945e, end: 0xff945e },
+    //       speed: 20,
+    //       accelerationY: -500,
+    //       angle: { min: -85, max: -95 },
+    //       rotate: { min: -180, max: 180 },
+    //       lifespan: { min: 1000, max: 1100 },
+    //       blendMode: 'ADD',
+    //       frequency: 110,
+    //       maxParticles: 5,
+    //       x: this.gunTopRight.x,
+    //       y: this.gunTopRight.y,
+    //     });
+    //   },
+    //   this
+    // );
 
     this.cameras.main.setBounds(0, 0, 10840, 600);
-    this.cameras.main.startFollow(this.arthur_run);
+    this.cameras.main.startFollow(this.arthur.run);
     this.cameras.main.setFollowOffset(-420, 0);
   }
 
-
-
   moveForward() {
-    if (this.enemy1.is_killed == true && this.arthur_run.x <= 1000) {
-      this.arthur_run.visible = true;
-      this.arthur_run.x += 5;
+    if (this.enemy1.is_killed == true && this.arthur.run.x <= 1000) {
+      this.arthur.run.visible = true;
+      this.arthur.run.x += 5;
 
       this.arthur.visible = false;
-      this.gun.visible = false;
-    } else if (this.arthur_run.x > 1000) {
-      this.arthur_run.stop();
-      this.arthur.x = this.arthur_run.x;
+      this.arthur.gun.visible = false;
+    } else if (this.arthur.run.x > 1000) {
+      this.arthur.run.stop();
+      this.arthur.x = this.arthur.run.x;
 
       this.arthur.visible = true;
-      this.arthur_run.visible = false;
-      this.gun.x = this.arthur_run.x - 20;
-      this.fireLine.x = this.gun.x;
-      this.gun.visible = true;
-      this.gunTween.play();
+      this.arthur.run.visible = false;
+      this.arthur.gun.x = this.arthur.run.x - 20;
+      this.arthur.fireLine.x = this.arthur.gun.x;
+      this.arthur.gun.visible = true;
+      this.arthur.gunTween.play();
     }
   }
 
