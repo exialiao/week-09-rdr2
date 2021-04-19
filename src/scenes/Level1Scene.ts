@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { WeaponPlugin } from 'phaser3-weapon-plugin';
 
 import createArthurAnims from '../anims/Arthur';
+import Enemy from '../sprite/enemy';
 
 export default class Level1Scene extends Phaser.Scene {
   gameOver = false;
@@ -13,13 +14,13 @@ export default class Level1Scene extends Phaser.Scene {
   weapon: any;
   arthur_run_enemy: any;
   gunTopRight: any;
-  enemy1: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody[];
-  enemy1_shot: boolean;
-  enemy1_weapon: any;
-  enemy1_gun: Phaser.GameObjects.Sprite;
-  enemy1_gunTopLeft: any;
 
-  enemy1_killed: boolean;
+  // enemy1.can_shoot: boolean;
+  // enemy1.weapon: any;
+  // enemy1.gun: Phaser.GameObjects.Sprite;
+  // enemy1.gunTopLeft: any;
+
+  // enemy1.is_killed: boolean;
   arthur: Phaser.Types.Physics.Arcade.ImageWithDynamicBody;
   cloud: Phaser.GameObjects.TileSprite;
   birds: Phaser.GameObjects.TileSprite;
@@ -46,6 +47,7 @@ export default class Level1Scene extends Phaser.Scene {
   farm: Phaser.GameObjects.Image;
   ground: Phaser.Types.Physics.Arcade.ImageWithDynamicBody;
   missShotArea2: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
+  enemy1: Enemy;
 
   constructor() {
     super('level-1');
@@ -102,7 +104,6 @@ export default class Level1Scene extends Phaser.Scene {
     //   .setAngle(90)
     //   .setScrollFactor(0);
 
-
     //arthur run
     createArthurAnims(this.anims);
     this.arthur_run = this.add.sprite(300, 500, 'arthur_run');
@@ -158,19 +159,20 @@ export default class Level1Scene extends Phaser.Scene {
     this.gunTopRight = this.gun.getTopRight();
 
     // enemy
-    this.enemy1 = [this.physics.add.sprite(1000, 485, 'enemy1_body')];
-    this.enemy1_gun = this.add.sprite(950, 445, 'enemy1_gun');
+    this.enemy1 = new Enemy(this, 1000);
+    // this.enemy1 = [this.physics.add.sprite(1000, 485, 'enemy1_body')];
+    // this.enemy1.gun = this.add.sprite(950, 445, 'enemy1.gun');
 
-    this.enemy1_killed = false;
+    // this.enemy1.is_killed = false;
     // enemy weapon
 
-    this.enemy1_weapon = this.add.weapon(100, 'bullet');
-    this.enemy1_weapon.debugPhysics = true;
-    this.enemy1_weapon.bulletAngleOffset = 90;
-    this.enemy1_weapon.bulletSpeed = 2000;
-    this.enemy1_gunTopLeft = this.enemy1_gun.getTopLeft();
+    // this.enemy1.weapon = this.add.weapon(100, 'bullet');
+    // this.enemy1.weapon.debugPhysics = true;
+    // this.enemy1.weapon.bulletAngleOffset = 90;
+    // this.enemy1.weapon.bulletSpeed = 2000;
+    // this.enemy1.gunTopLeft = this.enemy1.gun.getTopLeft();
 
-    this.enemy1_shot = false;
+    // this.enemy1.can_shoot = false;
 
     // bullet overlap
 
@@ -180,16 +182,16 @@ export default class Level1Scene extends Phaser.Scene {
       (enemy1, bullet) => {
         bullet.kill();
         enemy1.destroy();
-        this.enemy1_gun.destroy();
+        this.enemy1.gun.destroy();
 
-        this.enemy1_shot = false;
-        this.enemy1_killed = true;
+        this.enemy1.can_shoot = false;
+        this.enemy1.is_killed = true;
       }
     );
 
     this.physics.add.overlap(
       this.arthur,
-      this.enemy1_weapon.bullets,
+      this.enemy1.weapon.bullets,
       (arthur, bullet) => {
         bullet.kill();
         arthur.setAlpha(0);
@@ -202,26 +204,26 @@ export default class Level1Scene extends Phaser.Scene {
       this.weapon.bullets,
       (ground, bullet) => {
         bullet.kill();
-        this.enemy1_shot = true;
+        this.enemy1.can_shoot = true;
       }
     );
-      this.physics.add.overlap(
-        this.missShotArea,
-        this.weapon.bullets,
-        (missShotArea, bullet) => {
-          bullet.kill();
-          this.enemy1_shot = true;
-        }
-      );
-        // this.physics.add.overlap(
-        //   this.missShotArea2,
-        //   this.weapon.bullets,
-        //   (missShotArea2, bullet) => {
-        //     bullet.kill();
-        //     this.enemy1_shot = true;
+    this.physics.add.overlap(
+      this.missShotArea,
+      this.weapon.bullets,
+      (missShotArea, bullet) => {
+        bullet.kill();
+        this.enemy1.can_shoot = true;
+      }
+    );
+    // this.physics.add.overlap(
+    //   this.missShotArea2,
+    //   this.weapon.bullets,
+    //   (missShotArea2, bullet) => {
+    //     bullet.kill();
+    //     this.enemy1.can_shoot = true;
 
-        //   }
-        // );
+    //   }
+    // );
 
     // shot
     this.input.on(
@@ -275,32 +277,17 @@ export default class Level1Scene extends Phaser.Scene {
     this.cameras.main.setFollowOffset(-420, 0);
   }
 
-  // enemey shot
-  enemyFire() {
-    if (this.enemy1_shot == true) {
-      this.enemy1_weapon.fireAngle = -180;
-      this.enemy1_weapon.fire(
-        this.enemy1_gunTopLeft,
-        undefined,
-        undefined,
-        -1,
-        10
-      );
-      this.enemy1_shot = false;
-    }
-  }
+
 
   moveForward() {
-    if (this.enemy1_killed == true && this.arthur_run.x <= 1000) {
+    if (this.enemy1.is_killed == true && this.arthur_run.x <= 1000) {
       this.arthur_run.visible = true;
       this.arthur_run.x += 5;
-
-
 
       this.arthur.visible = false;
       this.gun.visible = false;
     } else if (this.arthur_run.x > 1000) {
-      this.arthur_run.stop('arthur_run');
+      this.arthur_run.stop();
       this.arthur.x = this.arthur_run.x;
 
       this.arthur.visible = true;
@@ -309,13 +296,11 @@ export default class Level1Scene extends Phaser.Scene {
       this.fireLine.x = this.gun.x;
       this.gun.visible = true;
       this.gunTween.play();
-
-
     }
   }
 
   update() {
-    this.enemyFire();
+    // this.enemyFire();
     this.moveForward();
     this.cloud.tilePositionX += 0.5;
   }

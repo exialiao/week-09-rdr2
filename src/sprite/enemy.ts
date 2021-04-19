@@ -1,33 +1,54 @@
 import Phaser from 'phaser';
-import { WeaponPlugin } from 'phaser3-weapon-plugin';
-import Level1Scene from '../scenes/Level1Scene';
+import { Weapon } from 'phaser3-weapon-plugin';
+
 export default class Enemy extends Phaser.GameObjects.Sprite {
-    alive: boolean;
-    enemy1: any;
-    physics: any;
- 
-    constructor(config) {
-      super(Level1Scene, 1000, 485, config.key);
-      config.scene.physics.world.enable(this);
-      config.scene.add.existing(this);
-      this.alive = true;
+  physics: any;
 
-      // enemy
-      this.enemy1 = this.physics.add.sprite(1000, 485, 'enemy1_body');
-      this.enemy1_gun = this.add.sprite(950, 445, 'enemy1_gun');
+  gun: Phaser.GameObjects.Sprite;
+  weapon: Weapon;
+  add: any;
+  gunTopLeft: any;
 
-      this.enemy1_killed = false;
-      // enemy weapon
+  // TODO: Do I need is_alive and is_killed?
+  is_alive: boolean = true;
+  is_killed: boolean = false;
+  can_shoot: boolean = false;
 
-      this.enemy1_weapon = this.add.weapon(100, 'bullet');
-      this.enemy1_weapon.debugPhysics = true;
-      this.enemy1_weapon.bulletAngleOffset = 90;
-      this.enemy1_weapon.bulletSpeed = 2000;
-      this.enemy1_gunTopLeft = this.enemy1_gun.getTopLeft();
+  constructor(scene: Phaser.Scene, x: number) {
+    // super(Level1Scene, 1000, 485, config.key);
+    super(scene, x, 485, 'enemy1_body');
 
-      this.enemy1_shot = false;
+    scene.add.existing(this);
+    scene.physics.add.existing(this);
+
+    // enemy
+    this.gun = scene.add.sprite(950, 445, 'enemy1_gun');
+
+    // enemy weapon
+
+    this.weapon = this.scene.add.weapon(100, 'bullet');
+    this.weapon.debugPhysics = true;
+    this.weapon.bulletAngleOffset = 90;
+    this.weapon.bulletSpeed = 2000;
+
+    // TODO: Rename to something meaningful
+    this.gunTopLeft = this.gun.getTopLeft();
+  }
+
+  preUpdate(time, delta) {
+    super.preUpdate(time, delta);
+
+    this.enemyFire();
+  }
+
+  // enemey shot
+  enemyFire() {
+    if (this.can_shoot != true) {
+      return;
     }
 
-
-
+    this.weapon.fireAngle = -180;
+    this.weapon.fire(this.gunTopLeft, undefined, undefined, -1, 10);
+    this.can_shoot = false;
+  }
 }
