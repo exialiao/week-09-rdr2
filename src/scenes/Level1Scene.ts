@@ -18,7 +18,6 @@ export default class Level1Scene extends Phaser.Scene {
   enemy1_weapon: any;
   enemy1_gun: Phaser.GameObjects.Sprite;
   enemy1_gunTopLeft: any;
-  missShotArea: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody[];
 
   enemy1_killed: boolean;
   arthur: Phaser.Types.Physics.Arcade.ImageWithDynamicBody;
@@ -38,6 +37,13 @@ export default class Level1Scene extends Phaser.Scene {
     maxSpeed: number;
   };
   controls: Phaser.Cameras.Controls.SmoothedKeyControl;
+  missShotArea: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
+  background: Phaser.GameObjects.Image;
+  sun: Phaser.GameObjects.Image;
+  mountain1: Phaser.GameObjects.Image;
+  mountain3a: Phaser.GameObjects.Image;
+  mountain3b: Phaser.GameObjects.Image;
+  farm: Phaser.GameObjects.Image;
 
   constructor() {
     super('level-1');
@@ -45,40 +51,57 @@ export default class Level1Scene extends Phaser.Scene {
 
   create() {
     // background
-    this.add.image(1440, 600, 'background');
-    this.add.image(1440, 900, 'sun');
-    // this.birds = this.add.tileSprite(2200,300,0, 0, 'birds');
-    this.cloud = this.add.tileSprite(0, 0, 2781, 782, 'cloud').setOrigin(0, 0);
-    // this.add.image(1480, 400, 'cloud');
-    this.add.image(1280, 940, 'mountain_1');
-    this.mountain2 = this.add.tileSprite(580, 1050, 0, 0, 'mountain_2');
-    this.add.image(280, 1080, 'mountain_3a');
-    this.add.image(2480, 1020, 'mountain_3b');
-    this.add.image(2280, 1050, 'farm');
-    this.add.image(2780, 1030, 'roadsign');
-    this.add.image(2080, 1000, 'carriage');
-    this.add.image(180, 950, 'tent');
-    this.add.image(880, 980, 'bg_horse');
-    this.add.image(1580, 660, 'tree');
-    this.add.image(1580, 1150, 'ground');
+    this.background = this.add.image(0, 0, 'background').setOrigin(0, 0);
+    this.background.setScrollFactor(0);
 
+    this.sun = this.add.image(500, 200, 'sun').setOrigin(0, 0);
+    this.sun.setScrollFactor(0);
+
+    // this.birds = this.add.tileSprite(2200,300,0, 0, 'birds');
+
+    this.cloud = this.add.tileSprite(0, 0, 1440, 600, 'cloud').setOrigin(0, 0);
+    this.cloud.setScrollFactor(0);
+
+    this.mountain1 = this.add.image(0, 330, 'mountain_1').setOrigin(0, 0);
+    this.mountain1.setScrollFactor(0.05);
+
+    this.mountain2 = this.add
+      .tileSprite(-150, 400, 2133, 204, 'mountain_2')
+      .setOrigin(0, 0);
+    this.mountain2.setScrollFactor(0.1);
+
+    this.mountain3a = this.add.image(20, 470, 'mountain_3a').setOrigin(0, 0);
+    this.mountain3a.setScrollFactor(0.2);
+    this.mountain3b = this.add.image(900, 445, 'mountain_3b').setOrigin(0, 0);
+    this.mountain3b.setScrollFactor(0.2);
+
+    this.farm = this.add.image(870, 475, 'farm').setOrigin(0, 0);
+    this.farm.setScrollFactor(0.45);
+
+    this.add.image(950, 455, 'roadsign').setOrigin(0, 0).setScrollFactor(0.85);
+    this.add.image(1100, 390, 'carriage').setOrigin(0, 0).setScrollFactor(0.95);
+    this.add.image(-50, 390, 'tent').setOrigin(0, 0).setScrollFactor(0.85);
+    this.add.image(400, 400, 'bg_horse').setOrigin(0, 0).setScrollFactor(0.85);
+    this.add.image(550, 100, 'tree').setOrigin(0, 0).setScrollFactor(0.75);
+    this.add.image(0, 550, 'ground').setOrigin(0, 0).setScrollFactor(0);
 
     //arthur run
     createArthurAnims(this.anims);
-    this.arthur_run = this.add.sprite(500, 995, 'arthur_run');
+    this.arthur_run = this.add.sprite(300, 500, 'arthur_run');
+    this.arthur_run.setScale(0.5);
     this.arthur_run.visible = false;
     this.arthur_run.play('arthur_run');
 
     // arthur shot
-    this.arthur = this.physics.add.image(500, 970, 'arthur_shot_body');
+    this.arthur = this.physics.add.image(300, 485, 'arthur_shot_body');
     this.arthur.visible = true;
 
-    this.fireLine = this.add.sprite(455, 847, 'arthur_fireline');
+    this.fireLine = this.add.sprite(280, 425, 'arthur_fireline');
     this.fireLine.setOrigin(0, 0);
     this.fireLine.visible = false;
     // the rotating gun
     this.gunAngle = 50;
-    this.gun = this.add.sprite(455, 850, 'arthur_shot_arm');
+    this.gun = this.add.sprite(280, 425, 'arthur_shot_arm');
     this.gun.setOrigin(0, 0);
     this.gun.setAngle(-(this.gunAngle / 2));
     this.gun.visible = true;
@@ -117,8 +140,8 @@ export default class Level1Scene extends Phaser.Scene {
     this.gunTopRight = this.gun.getTopRight();
 
     // enemy
-    this.enemy1 = [this.physics.add.sprite(1800, 995, 'enemy1_body')];
-    this.enemy1_gun = this.add.sprite(1700, 915, 'enemy1_gun');
+    this.enemy1 = [this.physics.add.sprite(1000, 485, 'enemy1_body')];
+    this.enemy1_gun = this.add.sprite(950, 445, 'enemy1_gun');
 
     this.enemy1_killed = false;
     // enemy weapon
@@ -132,7 +155,9 @@ export default class Level1Scene extends Phaser.Scene {
     this.enemy1_shot = false;
 
     // missshot
-    this.missShotArea = [this.physics.add.sprite(2800, 600, 'miss_area')];
+    this.missShotArea = this.physics.add
+      .sprite(1500, 300, 'miss_area')
+      .setAlpha(0);
 
     // bullet overlap
 
@@ -141,8 +166,9 @@ export default class Level1Scene extends Phaser.Scene {
       this.weapon.bullets,
       (enemy1, bullet) => {
         bullet.kill();
-        enemy1.setAlpha(0);
-        this.enemy1_gun.setAlpha(0);
+        enemy1.destroy();
+        this.enemy1_gun.destroy();
+
         this.enemy1_shot = false;
         this.enemy1_killed = true;
       }
@@ -215,9 +241,9 @@ export default class Level1Scene extends Phaser.Scene {
       this
     );
 
-    this.cameras.main.setBounds(0, 0, 4000, 1200);
+    this.cameras.main.setBounds(0, 0, 10840, 600);
     this.cameras.main.startFollow(this.arthur_run);
-    this.cameras.main.setFollowOffset(-800, 0);
+    this.cameras.main.setFollowOffset(-420, 0);
   }
 
   // enemey shot
@@ -236,19 +262,24 @@ export default class Level1Scene extends Phaser.Scene {
   }
 
   moveForward() {
-    if (this.enemy1_killed == true && this.arthur_run.x <= 1500) {
+    if (this.enemy1_killed == true && this.arthur_run.x <= 1000) {
       this.arthur_run.visible = true;
       this.arthur_run.x += 5;
+
       this.arthur.visible = false;
       this.gun.visible = false;
-    } else if (this.arthur_run.x > 1500) {
+    } else if (this.arthur_run.x > 1000) {
       this.arthur_run.stop('arthur_run');
       this.arthur.x = this.arthur_run.x;
+
       this.arthur.visible = true;
       this.arthur_run.visible = false;
-      this.gun.x=this.arthur_run.x -45;
-      this.gun.visible =true;
+      this.gun.x = this.arthur_run.x - 20;
+      this.fireLine.x = this.gun.x;
+      this.gun.visible = true;
       this.gunTween.play();
+
+      this.missShotArea.x = this.arthur.x + 1100;
     }
   }
 
