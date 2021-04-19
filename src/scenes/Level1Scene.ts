@@ -1,5 +1,4 @@
-import Phaser from 'phaser';
-import { WeaponPlugin } from 'phaser3-weapon-plugin';
+import { Bullet, WeaponPlugin } from 'phaser3-weapon-plugin';
 
 import createArthurAnims from '../anims/Arthur';
 import Enemy from '../sprite/enemy';
@@ -160,24 +159,13 @@ export default class Level1Scene extends Phaser.Scene {
     this.physics.add.overlap(
       this.enemy1,
       this.arthur.weapon.bullets,
-      (enemy1, bullet) => {
-        bullet.kill();
-        enemy1.destroy();
-        this.enemy1.gun.destroy();
-
-        this.enemy1.can_shoot = false;
-        this.enemy1.is_killed = true;
-      }
+      this.enemy1.shot
     );
 
     this.physics.add.overlap(
       this.arthur,
       this.enemy1.weapon.bullets,
-      (arthur, bullet) => {
-        bullet.kill();
-        arthur.destroy();
-        this.gun.setAlpha(0);
-      }
+      this.arthur.shot
     );
 
     this.physics.add.overlap(
@@ -188,6 +176,7 @@ export default class Level1Scene extends Phaser.Scene {
         this.enemy1.can_shoot = true;
       }
     );
+
     this.physics.add.overlap(
       this.missShotArea,
       this.arthur.weapon.bullets,
@@ -254,33 +243,15 @@ export default class Level1Scene extends Phaser.Scene {
     // );
 
     this.cameras.main.setBounds(0, 0, 10840, 600);
-    this.cameras.main.startFollow(this.arthur.run);
+    this.cameras.main.startFollow(this.arthur);
     this.cameras.main.setFollowOffset(-420, 0);
-  }
-
-  moveForward() {
-    if (this.enemy1.is_killed == true && this.arthur.run.x <= 1000) {
-      this.arthur.run.visible = true;
-      this.arthur.run.x += 5;
-
-      this.arthur.visible = false;
-      this.arthur.gun.visible = false;
-    } else if (this.arthur.run.x > 1000) {
-      this.arthur.run.stop();
-      this.arthur.x = this.arthur.run.x;
-
-      this.arthur.visible = true;
-      this.arthur.run.visible = false;
-      this.arthur.gun.x = this.arthur.run.x - 20;
-      this.arthur.fireLine.x = this.arthur.gun.x;
-      this.arthur.gun.visible = true;
-      this.arthur.gunTween.play();
-    }
   }
 
   update() {
     // this.enemyFire();
-    this.moveForward();
+    if (this.enemy1.is_killed == true) {
+      this.arthur.moveForward();
+    }
     this.cloud.tilePositionX += 0.5;
   }
 }

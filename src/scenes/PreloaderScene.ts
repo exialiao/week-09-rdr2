@@ -1,5 +1,3 @@
-import Phaser from 'phaser';
-
 export default class PreloaderScene extends Phaser.Scene {
   constructor() {
     super('preloader');
@@ -40,12 +38,6 @@ export default class PreloaderScene extends Phaser.Scene {
     this.load.image('arthur_fireline', 'assets/img/arthur/arthur_fireline.png');
     this.load.image('gun_smoke', 'assets/img/arthur/gun_smoke.png');
     this.load.image('bullet', 'assets/img/arthur/bullet.png');
-    this.load.scenePlugin(
-      'WeaponPlugin',
-      'path/to/WeaponPlugin.js',
-      'weaponPlugin',
-      'weapons'
-    );
 
     // enemy
     this.load.image('enemy1_body', 'assets/img/enemy/enemy1_body.png');
