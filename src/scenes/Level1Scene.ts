@@ -44,6 +44,8 @@ export default class Level1Scene extends Phaser.Scene {
   mountain3a: Phaser.GameObjects.Image;
   mountain3b: Phaser.GameObjects.Image;
   farm: Phaser.GameObjects.Image;
+  ground: Phaser.Types.Physics.Arcade.ImageWithDynamicBody;
+  missShotArea2: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
 
   constructor() {
     super('level-1');
@@ -83,7 +85,23 @@ export default class Level1Scene extends Phaser.Scene {
     this.add.image(-50, 390, 'tent').setOrigin(0, 0).setScrollFactor(0.85);
     this.add.image(400, 400, 'bg_horse').setOrigin(0, 0).setScrollFactor(0.85);
     this.add.image(550, 100, 'tree').setOrigin(0, 0).setScrollFactor(0.75);
-    this.add.image(0, 550, 'ground').setOrigin(0, 0).setScrollFactor(0);
+
+    this.ground = this.physics.add
+      .image(0, 550, 'ground')
+      .setOrigin(0, 0)
+      .setScrollFactor(0);
+    // missshot
+    this.missShotArea = this.physics.add
+      .sprite(1500, 300, 'miss_area')
+      .setAlpha(1)
+      .setScrollFactor(0);
+
+    // this.missShotArea2 = this.physics.add
+    //   .sprite(1200, -50, 'miss_area')
+    //   .setAlpha(1)
+    //   .setAngle(90)
+    //   .setScrollFactor(0);
+
 
     //arthur run
     createArthurAnims(this.anims);
@@ -154,11 +172,6 @@ export default class Level1Scene extends Phaser.Scene {
 
     this.enemy1_shot = false;
 
-    // missshot
-    this.missShotArea = this.physics.add
-      .sprite(1500, 300, 'miss_area')
-      .setAlpha(0);
-
     // bullet overlap
 
     this.physics.add.overlap(
@@ -175,16 +188,6 @@ export default class Level1Scene extends Phaser.Scene {
     );
 
     this.physics.add.overlap(
-      this.missShotArea,
-      this.weapon.bullets,
-      (missShotArea, bullet) => {
-        bullet.kill();
-        missShotArea.setAlpha(0);
-        this.enemy1_shot = true;
-      }
-    );
-
-    this.physics.add.overlap(
       this.arthur,
       this.enemy1_weapon.bullets,
       (arthur, bullet) => {
@@ -194,6 +197,32 @@ export default class Level1Scene extends Phaser.Scene {
       }
     );
 
+    this.physics.add.overlap(
+      this.ground,
+      this.weapon.bullets,
+      (ground, bullet) => {
+        bullet.kill();
+        this.enemy1_shot = true;
+      }
+    );
+      this.physics.add.overlap(
+        this.missShotArea,
+        this.weapon.bullets,
+        (missShotArea, bullet) => {
+          bullet.kill();
+          this.enemy1_shot = true;
+        }
+      );
+        // this.physics.add.overlap(
+        //   this.missShotArea2,
+        //   this.weapon.bullets,
+        //   (missShotArea2, bullet) => {
+        //     bullet.kill();
+        //     this.enemy1_shot = true;
+
+        //   }
+        // );
+
     // shot
     this.input.on(
       'pointerdown',
@@ -202,7 +231,7 @@ export default class Level1Scene extends Phaser.Scene {
         this.weapon.fireAngle = this.gun.angle + 2.5;
         this.gunTopRight = this.gun.getTopRight();
         this.weapon.fire(this.gunTopRight, undefined, undefined, -10, 10);
-        this.gunTween.stop();
+        this.gunTween.pause();
 
         // we say we can fire when the fire line is not visible
         if (!this.fireLine.visible) {
@@ -266,6 +295,8 @@ export default class Level1Scene extends Phaser.Scene {
       this.arthur_run.visible = true;
       this.arthur_run.x += 5;
 
+
+
       this.arthur.visible = false;
       this.gun.visible = false;
     } else if (this.arthur_run.x > 1000) {
@@ -279,7 +310,7 @@ export default class Level1Scene extends Phaser.Scene {
       this.gun.visible = true;
       this.gunTween.play();
 
-      this.missShotArea.x = this.arthur.x + 1100;
+
     }
   }
 
