@@ -7,7 +7,18 @@
     "start": "vite",
     "build": "vite build"
   },
+
+   "repository": {
+    "type": "git",
+    "url": "git+https://github.com/exialiao/week-09-rdr2.git"
+  },
+  "keywords": [],
+  "author": "Haiping Liao <exialiao@gmail.com>",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chousiyan/Liquidator-ts/issues"
+  },
+  "homepage": "https://chousiyan.github.io/Liquidator-ts/",
   "devDependencies": {
     "@rollup/plugin-alias": "^3.1.2",
     "@rollup/plugin-commonjs": "^18.0.0",

@@ -95,7 +95,7 @@ export default class Level1Scene extends Phaser.Scene {
      .setScrollFactor(0);
     // missshot
     this.missShotArea = this.physics.add
-      .sprite(1400, 300, 'miss_area')
+      .sprite(1600, 300, 'miss_area')
       .setAlpha(1)
       .setScrollFactor(0);
 
