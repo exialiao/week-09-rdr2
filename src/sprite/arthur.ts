@@ -158,7 +158,7 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
   shot(arthur, bullet) {
     bullet.kill();
     this.is_killed = true;
-    console.log(this.is_killed);
+
     arthur.destroy();
     arthur.gun.destroy();
   }

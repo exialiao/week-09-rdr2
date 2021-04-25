@@ -150,8 +150,7 @@ export default class Level1Scene extends Phaser.Scene {
   }
 
   update() {
-    // this.enemyFire();
-    console.log(this.arthur.is_killed);
+
 
     if (this.enemy1.is_killed == true) {
       this.arthur.moveForward();
