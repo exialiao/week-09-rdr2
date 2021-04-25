@@ -19,6 +19,8 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
   plugins: any;
   gunTopRight: any;
   gun_smoke: Phaser.GameObjects.Particles.ParticleEmitterManager;
+  run: Phaser.GameObjects.GameObject;
+  shot_sound: any;
 
   constructor(scene: Phaser.Scene) {
     // super(Level1Scene, 1000, 485, config.key);
@@ -76,8 +78,15 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
     //  Tell the Weapon to track the 'player' Sprite
     this.gunTopRight = this.gun.getTopRight();
 
+
+    // shot sound
+     this.shot_sound = scene.sound.add('shot_sound');
+
     // shot
     this.scene.input.on('pointerdown', this.fire, this);
+
+
+
   }
 
   preUpdate(time: number, delta: number) {
@@ -87,7 +96,11 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
   createAnims() {
     this.anims.create({
       key: 'arthur_stand',
-      frames: [{ key: 'arthur', frame: 'arthur_shot_body' }],
+      frames: this.anims.generateFrameNumbers('arthur_shot_body', {
+        frames: [0],
+      }),
+      frameRate: 1,
+      repeat: -1,
     });
 
     this.anims.create({
@@ -101,6 +114,7 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
       }),
       frameRate: 26,
       repeat: -1,
+
     });
   }
 
@@ -110,6 +124,10 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
     this.gunTopRight = this.gun.getTopRight();
     this.weapon.fire(this.gunTopRight, undefined, undefined, -10, 10);
     this.gunTween.pause();
+    this.shot_sound.play();
+
+    console.log(this.gunTween.angle);
+    
 
     // we say we can fire when the fire line is not visible
     if (!this.fireLine.visible) {
@@ -154,16 +172,18 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
 
   moveForward() {
     if (this.x <= 1000) {
-      this.anims.play('arthur_run');
+      this.anims.play('arthur_run',true);
       // this.visible = true;
       this.x += 5;
+      this.y = 500;
 
       // this.visible = false;
       this.gun.visible = false;
     } else if (this.x > 1000) {
-      this.anims.play('arthur_stand');
+      this.anims.play('arthur_stand',true);
       this.stop();
       this.x = this.x;
+      this.y = 485;
 
       // this.visible = true;
       // this.visible = false;

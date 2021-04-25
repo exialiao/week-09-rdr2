@@ -30,10 +30,19 @@ export default class PreloaderScene extends Phaser.Scene {
       'assets/img/arthur/arthur_run.json'
     );
 
-    this.load.image(
+    this.load.spritesheet(
       'arthur_shot_body',
-      'assets/img/arthur/arthur_shot_body.png'
+      'assets/img/arthur/arthur_shot_body.png',
+      {
+        frameWidth: 150,
+        frameHeight: 192,
+      }
     );
+
+    // this.load.image(
+    //   'arthur_shot_body',
+    //   'assets/img/arthur/arthur_shot_body.png'
+    // );
     this.load.image('arthur_shot_arm', 'assets/img/arthur/arthur_shot_arm.png');
     this.load.image('arthur_fireline', 'assets/img/arthur/arthur_fireline.png');
     this.load.image('gun_smoke', 'assets/img/arthur/gun_smoke.png');
@@ -42,6 +51,17 @@ export default class PreloaderScene extends Phaser.Scene {
     // enemy
     this.load.image('enemy1_body', 'assets/img/enemy/enemy1_body.png');
     this.load.image('enemy1_gun', 'assets/img/enemy/enemy1_gun.png');
+
+
+
+
+
+    // audio
+
+    this.load.audio('background_music', 'assets/sound/background.mp3');
+    this.load.audio('shot_sound', 'assets/sound/shot.mp3');
+
+
   }
 
   create() {
