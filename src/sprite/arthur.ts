@@ -1,5 +1,4 @@
 import { Weapon } from 'phaser3-weapon-plugin';
-import createArthurAnims from '../anims/Arthur';
 
 export default class Arthur extends Phaser.GameObjects.Sprite {
   physics: any;
@@ -78,15 +77,11 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
     //  Tell the Weapon to track the 'player' Sprite
     this.gunTopRight = this.gun.getTopRight();
 
-
     // shot sound
-     this.shot_sound = scene.sound.add('shot_sound');
+    this.shot_sound = scene.sound.add('shot_sound');
 
     // shot
     this.scene.input.on('pointerdown', this.fire, this);
-
-
-
   }
 
   preUpdate(time: number, delta: number) {
@@ -114,7 +109,6 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
       }),
       frameRate: 26,
       repeat: -1,
-
     });
   }
 
@@ -125,9 +119,6 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
     this.weapon.fire(this.gunTopRight, undefined, undefined, -10, 10);
     this.gunTween.pause();
     this.shot_sound.play();
-
-    console.log(this.gunTween.angle);
-    
 
     // we say we can fire when the fire line is not visible
     if (!this.fireLine.visible) {
@@ -166,13 +157,15 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
 
   shot(arthur, bullet) {
     bullet.kill();
+    this.is_killed = true;
+    console.log(this.is_killed);
     arthur.destroy();
-    arthur.gun.setAlpha(0);
+    arthur.gun.destroy();
   }
 
   moveForward() {
     if (this.x <= 1000) {
-      this.anims.play('arthur_run',true);
+      this.anims.play('arthur_run', true);
       // this.visible = true;
       this.x += 5;
       this.y = 500;
@@ -180,7 +173,7 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
       // this.visible = false;
       this.gun.visible = false;
     } else if (this.x > 1000) {
-      this.anims.play('arthur_stand',true);
+      this.anims.play('arthur_stand', true);
       this.stop();
       this.x = this.x;
       this.y = 485;

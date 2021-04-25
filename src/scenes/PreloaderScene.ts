@@ -4,6 +4,9 @@ export default class PreloaderScene extends Phaser.Scene {
   }
 
   preload() {
+    this.load.image('title', 'assets/img/title.png');
+    this.load.image('start', 'assets/img/start.png');
+
     this.load.image('background', 'assets/img/background.png');
     this.load.image('sun', 'assets/img/sun.png');
     this.load.image('birds', 'assets/img/birds.png');
@@ -52,19 +55,13 @@ export default class PreloaderScene extends Phaser.Scene {
     this.load.image('enemy1_body', 'assets/img/enemy/enemy1_body.png');
     this.load.image('enemy1_gun', 'assets/img/enemy/enemy1_gun.png');
 
-
-
-
-
     // audio
 
     this.load.audio('background_music', 'assets/sound/background.mp3');
     this.load.audio('shot_sound', 'assets/sound/shot.mp3');
-
-
   }
 
   create() {
-    this.scene.start('level-1');
+    this.scene.start('gamestart');
   }
 }

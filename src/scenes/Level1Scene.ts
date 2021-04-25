@@ -1,6 +1,5 @@
 import { Bullet, WeaponPlugin } from 'phaser3-weapon-plugin';
 
-import createArthurAnims from '../anims/Arthur';
 import Enemy from '../sprite/enemy';
 import Arthur from '../sprite/arthur';
 
@@ -83,20 +82,18 @@ export default class Level1Scene extends Phaser.Scene {
     this.add.image(400, 400, 'bg_horse').setOrigin(0, 0).setScrollFactor(0.85);
     this.add.image(550, 100, 'tree').setOrigin(0, 0).setScrollFactor(0.75);
 
-    this.background_music = this.sound.add('background_music');
+    // this.background_music = this.sound.add('background_music');
 
-    this.background_music.play();
-
-
+    // this.background_music.play();
 
     this.ground = this.physics.add
       .image(0, 550, 'ground')
       .setOrigin(0, 0)
-     .setScrollFactor(0);
+      .setScrollFactor(0);
     // missshot
     this.missShotArea = this.physics.add
-      .sprite(1600, 300, 'miss_area')
-      .setAlpha(1)
+      .sprite(1440, 300, 'miss_area')
+      .setAlpha(0)
       .setScrollFactor(0);
 
     // this.missShotArea2 = this.physics.add
@@ -154,9 +151,16 @@ export default class Level1Scene extends Phaser.Scene {
 
   update() {
     // this.enemyFire();
+    console.log(this.arthur.is_killed);
+
     if (this.enemy1.is_killed == true) {
       this.arthur.moveForward();
     }
+    if (this.arthur.is_killed == true) {
+      this.scene.stop('level-1');
+      this.scene.start('gameover');
+    }
+
     this.cloud.tilePositionX += 0.5;
   }
 }
