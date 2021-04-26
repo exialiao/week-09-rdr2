@@ -114,7 +114,11 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
       frameRate: 26,
       repeat: -1,
     });
+
+
+
   }
+
 
   fire() {
     // arthur shot
@@ -123,6 +127,7 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
     this.weapon.fire(this.gunTopRight, undefined, undefined, -10, 10);
     this.gunTween.pause();
     this.shot_sound.play();
+
 
     // we say we can fire when the fire line is not visible
     if (!this.fireLine.visible) {
@@ -171,7 +176,7 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
     if (this.x <= 1000) {
       this.anims.play('arthur_run', true);
       // this.visible = true;
-      this.x += 50;
+      this.x += 5;
       this.y = 500;
 
       // this.visible = false;
@@ -186,13 +191,16 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
     this.x = this.x;
     this.y = 485;
 
-    // this.visible = true;
-    // this.visible = false;
+    this.gun.x = this.x - 20;
+    this.fireLine.x = this.gun.x;
+    this.gun.visible = true;
+    // console.log(this.gunTween);
+
     this.gun.x = this.x - 20;
     this.fireLine.x = this.gun.x;
     this.gun.visible = true;
     console.log(this.gunTween);
 
-    this.gunTween.play();
+  this.gunTween.resume();
   }
 }

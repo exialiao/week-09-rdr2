@@ -19,7 +19,7 @@ export default class Enemy extends Phaser.GameObjects.Sprite {
     scene.physics.add.existing(this);
 
     // enemy
-    this.gun = scene.add.sprite(950, 445, 'enemy1_gun');
+    this.gun = scene.add.sprite(x-50, 445, 'enemy1_gun');
 
     // enemy weapon
 

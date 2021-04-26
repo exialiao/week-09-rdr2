@@ -42,6 +42,7 @@ export default class Level1Scene extends Phaser.Scene {
   enemy1: Enemy;
   arthur: Arthur;
   background_music: any;
+  enemy2: Enemy;
 
   constructor() {
     super('level-1');
@@ -113,6 +114,7 @@ export default class Level1Scene extends Phaser.Scene {
 
     // enemy
     this.enemy1 = new Enemy(this, 1000);
+    this.enemy2 = new Enemy(this, 1700);
 
     this.physics.add.overlap(
       this.enemy1,
