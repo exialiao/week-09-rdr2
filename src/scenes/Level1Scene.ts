@@ -117,13 +117,16 @@ export default class Level1Scene extends Phaser.Scene {
     this.physics.add.overlap(
       this.enemy1,
       this.arthur.weapon.bullets,
-      this.enemy1.shot
+      (enemy: Enemy, bullet) => {
+        enemy.getsHit(enemy, bullet);
+        this.arthur.canMoveForward = true;
+      }
     );
 
     this.physics.add.overlap(
       this.arthur,
       this.enemy1.weapon.bullets,
-      this.arthur.shot
+      this.arthur.getsHit
     );
 
     this.physics.add.overlap(
@@ -150,9 +153,8 @@ export default class Level1Scene extends Phaser.Scene {
   }
 
   update() {
-
-
-    if (this.enemy1.is_killed == true) {
+    if (this.enemy1.is_killed == true && this.arthur.canMoveForward) {
+      console.log(this.arthur.canMoveForward);
       this.arthur.moveForward();
     }
     if (this.arthur.is_killed == true) {

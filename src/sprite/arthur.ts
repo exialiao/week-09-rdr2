@@ -1,25 +1,27 @@
 import { Weapon } from 'phaser3-weapon-plugin';
 
+// TODO: Replace all 'any' types.
 export default class Arthur extends Phaser.GameObjects.Sprite {
-  physics: any;
+  // physics: any;
 
   gun: Phaser.GameObjects.Sprite;
   weapon: Weapon;
-  add: any;
+  // add: any;
   gunTopLeft: any;
 
   is_killed: boolean = false;
   can_shoot: boolean = false;
   // run: Phaser.GameObjects.Sprite;
 
-  fireLine: any;
+  fireLine: Phaser.GameObjects.Sprite;
   gunAngle: number;
-  gunTween: any;
+  gunTween: Phaser.Tweens.Tween;
   plugins: any;
   gunTopRight: any;
   gun_smoke: Phaser.GameObjects.Particles.ParticleEmitterManager;
   run: Phaser.GameObjects.GameObject;
   shot_sound: any;
+  canMoveForward: boolean = false;
 
   constructor(scene: Phaser.Scene) {
     // super(Level1Scene, 1000, 485, config.key);
@@ -48,11 +50,13 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
     this.gunAngle = 50;
     this.gun = this.scene.add.sprite(280, 425, 'arthur_shot_arm');
     this.gun.setOrigin(0, 0);
+
+    // TODO: leave a note on why it's half and negative??
     this.gun.setAngle(-(this.gunAngle / 2));
     this.gun.visible = true;
 
     this.gunTween = scene.tweens.add({
-      targets: [this.gun],
+      targets: this.gun,
       angle: this.gunAngle,
       duration: 2000,
       repeat: -1,
@@ -155,7 +159,7 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
     });
   }
 
-  shot(arthur, bullet) {
+  getsHit(arthur, bullet) {
     bullet.kill();
     this.is_killed = true;
 
@@ -167,23 +171,28 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
     if (this.x <= 1000) {
       this.anims.play('arthur_run', true);
       // this.visible = true;
-      this.x += 5;
+      this.x += 50;
       this.y = 500;
 
       // this.visible = false;
       this.gun.visible = false;
-    } else if (this.x > 1000) {
-      this.anims.play('arthur_stand', true);
-      this.stop();
-      this.x = this.x;
-      this.y = 485;
-
-      // this.visible = true;
-      // this.visible = false;
-      this.gun.x = this.x - 20;
-      this.fireLine.x = this.gun.x;
-      this.gun.visible = true;
-      this.gunTween.play();
+      return;
     }
+
+    this.canMoveForward = false;
+
+    this.anims.play('arthur_stand', true);
+    // this.stop();
+    this.x = this.x;
+    this.y = 485;
+
+    // this.visible = true;
+    // this.visible = false;
+    this.gun.x = this.x - 20;
+    this.fireLine.x = this.gun.x;
+    this.gun.visible = true;
+    console.log(this.gunTween);
+
+    this.gunTween.play();
   }
 }
