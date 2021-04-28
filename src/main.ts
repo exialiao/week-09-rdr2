@@ -6,8 +6,12 @@ import GamestartScene from './scenes/GameStartScene';
 import GameoverScene from './scenes/GameOverScene';
 const config = {
   type: Phaser.AUTO,
-  width: 1440,
-  height: 600,
+  scale: {
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+    width: 1440,
+    height: 600,
+  },
   physics: {
     default: 'arcade',
     arcade: {
