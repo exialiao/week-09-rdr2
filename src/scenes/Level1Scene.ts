@@ -91,11 +91,11 @@ export default class Level1Scene extends Phaser.Scene {
       .image(0, 550, 'ground')
       .setOrigin(0, 0)
       .setScrollFactor(0);
-    // missshot
-    this.missShotArea = this.physics.add
-      .sprite(1440, 300, 'miss_area')
-      .setAlpha(0)
-      .setScrollFactor(0);
+    // // missshot
+    // this.missShotArea = this.physics.add
+    //   .sprite(1440, 300, 'miss_area')
+    //   .setAlpha(0)
+    //   .setScrollFactor(0);
 
     // this.missShotArea2 = this.physics.add
     //   .sprite(1200, -50, 'miss_area')
@@ -126,6 +126,17 @@ export default class Level1Scene extends Phaser.Scene {
     );
 
     this.physics.add.overlap(
+      this.enemy2,
+      this.arthur.weapon.bullets,
+      (enemy: Enemy, bullet) => {
+        console.log('enemy2 overlap');
+
+        enemy.getsHit(enemy, bullet);
+        this.arthur.canMoveForward = true;
+      }
+    );
+
+    this.physics.add.overlap(
       this.arthur,
       this.enemy1.weapon.bullets,
       this.arthur.getsHit
@@ -140,14 +151,14 @@ export default class Level1Scene extends Phaser.Scene {
       }
     );
 
-    this.physics.add.overlap(
-      this.missShotArea,
-      this.arthur.weapon.bullets,
-      (missShotArea, bullet) => {
-        bullet.kill();
-        this.enemy1.can_shoot = true;
-      }
-    );
+    // this.physics.add.overlap(
+    //   this.missShotArea,
+    //   this.arthur.weapon.bullets,
+    //   (missShotArea, bullet) => {
+    //     bullet.kill();
+    //     this.enemy1.can_shoot = true;
+    //   }
+    // );
 
     this.cameras.main.setBounds(0, 0, 10840, 600);
     this.cameras.main.startFollow(this.arthur);
@@ -159,6 +170,7 @@ export default class Level1Scene extends Phaser.Scene {
       console.log(this.arthur.canMoveForward);
       this.arthur.moveForward();
     }
+
     if (this.arthur.is_killed == true) {
       this.scene.stop('level-1');
       this.scene.start('gameover');

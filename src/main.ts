@@ -4,6 +4,7 @@ import Preloader from './scenes/PreloaderScene';
 import Level1Scene from './scenes/Level1Scene';
 import GamestartScene from './scenes/GameStartScene';
 import GameoverScene from './scenes/GameOverScene';
+
 const config = {
   type: Phaser.AUTO,
   scale: {
@@ -16,9 +17,10 @@ const config = {
     default: 'arcade',
     arcade: {
       gravity: { y: 0 },
-      debug: false,
+      debug: true,
     },
   },
-  scene: [Preloader, Level1Scene, GamestartScene, GameoverScene],
+  scene: [Preloader, GamestartScene, Level1Scene, GameoverScene],
 };
+
 new Phaser.Game(config);
