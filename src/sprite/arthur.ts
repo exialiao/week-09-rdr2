@@ -1,4 +1,4 @@
-import { Weapon } from 'phaser3-weapon-plugin';
+import { consts, Weapon } from 'phaser3-weapon-plugin';
 
 // TODO: Replace all 'any' types.
 export default class Arthur extends Phaser.GameObjects.Sprite {
@@ -11,13 +11,11 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
 
   is_killed: boolean = false;
   can_shoot: boolean = false;
-  // run: Phaser.GameObjects.Sprite;
 
   fireLine: Phaser.GameObjects.Sprite;
   gunAngle: number;
   gunTween: Phaser.Tweens.Tween;
-  plugins: any;
-  gunTopRight: any;
+  gunTopRight: Phaser.Math.Vector2;
   gun_smoke: Phaser.GameObjects.Particles.ParticleEmitterManager;
   run: Phaser.GameObjects.GameObject;
   shot_sound: any;
@@ -76,7 +74,9 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
     this.weapon.bulletAngleOffset = 90;
 
     //  The speed at which the bullet is fired
-    this.weapon.bulletSpeed = 2000;
+    this.weapon.bulletSpeed = 200;
+
+    this.weapon.bulletKillType = consts.KillType.KILL_WORLD_BOUNDS;
 
     //  Tell the Weapon to track the 'player' Sprite
     this.gunTopRight = this.gun.getTopRight();
@@ -85,12 +85,12 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
     this.shot_sound = scene.sound.add('shot_sound');
 
     // shot
-    this.scene.input.on('pointerdown', this.fire, this);
+    this.scene.input.on('pointerdown', this.shootWeapon, this);
   }
 
-  preUpdate(time: number, delta: number) {
-    super.preUpdate(time, delta);
-  }
+  // preUpdate(time: number, delta: number) {
+  //   super.preUpdate(time, delta);
+  // }
 
   createAnims() {
     this.anims.create({
@@ -114,20 +114,25 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
       frameRate: 26,
       repeat: -1,
     });
-
-
-
   }
 
+  shootWeapon() {
+    // this.gunTween.pause();
 
-  fire() {
     // arthur shot
-    this.weapon.fireAngle = this.gun.angle + 2.5;
-    this.gunTopRight = this.gun.getTopRight();
-    this.weapon.fire(this.gunTopRight, undefined, undefined, -10, 10);
-    this.gunTween.pause();
     this.shot_sound.play();
 
+    this.weapon.fireAngle = this.gun.angle + 2.5;
+    this.gunTopRight = this.gun.getTopRight();
+    const bullet = this.weapon.fire(
+      this.gunTopRight,
+      undefined,
+      undefined,
+      -10,
+      10
+    );
+
+    console.log(bullet?.getBounds());
 
     // we say we can fire when the fire line is not visible
     if (!this.fireLine.visible) {
@@ -179,6 +184,9 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
       this.x += 5;
       this.y = 500;
 
+      // FIXME: TOTAL HACK!
+      this.scene.physics.world.bounds.width += 5;
+
       // this.visible = false;
       this.gun.visible = false;
       return;
@@ -187,20 +195,11 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
     this.canMoveForward = false;
 
     this.anims.play('arthur_stand', true);
-    // this.stop();
-    this.x = this.x;
+
     this.y = 485;
-
     this.gun.x = this.x - 20;
     this.fireLine.x = this.gun.x;
     this.gun.visible = true;
-    // console.log(this.gunTween);
-
-    this.gun.x = this.x - 20;
-    this.fireLine.x = this.gun.x;
-    this.gun.visible = true;
-    console.log(this.gunTween);
-
-  this.gunTween.resume();
+    this.gunTween.resume();
   }
 }

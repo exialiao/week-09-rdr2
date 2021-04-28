@@ -50,9 +50,9 @@ export default class Enemy extends Phaser.GameObjects.Sprite {
 
   getsHit(enemy, bullet) {
     bullet.kill();
-    enemy.destroy();
     enemy.gun.destroy();
     enemy.can_shoot = false;
     enemy.is_killed = true;
+    enemy.destroy();
   }
 }
