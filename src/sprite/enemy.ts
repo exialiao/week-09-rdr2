@@ -1,15 +1,16 @@
 import { Weapon } from 'phaser3-weapon-plugin';
+import Arthur from './arthur';
 
 export default class Enemy extends Phaser.GameObjects.Sprite {
   physics: any;
 
   gun: Phaser.GameObjects.Sprite;
   weapon: Weapon;
-  add: any;
   gunTopLeft: any;
 
   is_killed: boolean = false;
   can_shoot: boolean = false;
+  arthur: Arthur;
 
   constructor(scene: Phaser.Scene, x: number) {
     // super(Level1Scene, 1000, 485, config.key);
@@ -18,8 +19,10 @@ export default class Enemy extends Phaser.GameObjects.Sprite {
     scene.add.existing(this);
     scene.physics.add.existing(this);
 
+    this.arthur = this.scene.arthur;
+
     // enemy
-    this.gun = scene.add.sprite(x-50, 445, 'enemy1_gun');
+    this.gun = scene.add.sprite(x - 50, 445, 'enemy1_gun');
 
     // enemy weapon
 
@@ -29,7 +32,20 @@ export default class Enemy extends Phaser.GameObjects.Sprite {
     this.weapon.bulletSpeed = 2000;
 
     this.gunTopLeft = this.gun.getTopLeft();
+
+    this.scene.physics.add.overlap(
+      this,
+      this.arthur.weapon.bullets,
+      (enemy: Enemy, bullet) => {
+        enemy.getsHit(enemy, bullet);
+        this.arthur.canMoveForward = true;
+      }
+    );
+
+  
   }
+
+
 
   preUpdate(time, delta) {
     super.preUpdate(time, delta);

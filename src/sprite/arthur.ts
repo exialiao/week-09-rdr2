@@ -2,12 +2,10 @@ import { consts, Weapon } from 'phaser3-weapon-plugin';
 
 // TODO: Replace all 'any' types.
 export default class Arthur extends Phaser.GameObjects.Sprite {
-  // physics: any;
+
 
   gun: Phaser.GameObjects.Sprite;
   weapon: Weapon;
-  // add: any;
-  gunTopLeft: any;
 
   is_killed: boolean = false;
   can_shoot: boolean = false;
@@ -18,8 +16,9 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
   gunTopRight: Phaser.Math.Vector2;
   gun_smoke: Phaser.GameObjects.Particles.ParticleEmitterManager;
   run: Phaser.GameObjects.GameObject;
-  shot_sound: any;
+
   canMoveForward: boolean = false;
+  shot_sound: Phaser.Sound.BaseSound;
 
   constructor(scene: Phaser.Scene) {
     // super(Level1Scene, 1000, 485, config.key);
@@ -31,13 +30,7 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
     //arthur run
     this.createAnims();
 
-    // this.run = this.scene.add.sprite(300, 500, 'arthur_run');
-    // this.run.setScale(0.5);
-    // this.run.visible = false;
-    // this.run.play('arthur_run');
 
-    // arthur shot
-    // this.arthur = this.scene.add.image(300, 485, 'arthur_shot_body');
     this.visible = true;
 
     this.fireLine = this.scene.add.sprite(280, 425, 'arthur_fireline');
@@ -74,7 +67,7 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
     this.weapon.bulletAngleOffset = 90;
 
     //  The speed at which the bullet is fired
-    this.weapon.bulletSpeed = 200;
+    this.weapon.bulletSpeed = 2000;
 
     this.weapon.bulletKillType = consts.KillType.KILL_WORLD_BOUNDS;
 
@@ -86,10 +79,14 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
 
     // shot
     this.scene.input.on('pointerdown', this.shootWeapon, this);
+
+
+
   }
 
   // preUpdate(time: number, delta: number) {
   //   super.preUpdate(time, delta);
+  //   this.shootWeapon()
   // }
 
   createAnims() {
@@ -117,7 +114,7 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
   }
 
   shootWeapon() {
-    // this.gunTween.pause();
+    this.gunTween.pause();
 
     // arthur shot
     this.shot_sound.play();
@@ -131,8 +128,6 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
       -10,
       10
     );
-
-    console.log(bullet?.getBounds());
 
     // we say we can fire when the fire line is not visible
     if (!this.fireLine.visible) {
