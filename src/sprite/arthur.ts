@@ -1,4 +1,5 @@
 import { consts, Weapon } from 'phaser3-weapon-plugin';
+import Enemy from './enemy';
 
 // TODO: Replace all 'any' types.
 export default class Arthur extends Phaser.GameObjects.Sprite {
@@ -18,6 +19,7 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
   run: Phaser.GameObjects.GameObject;
 
   canMoveForward: boolean = false;
+  enemy: Enemy;
   shot_sound: Phaser.Sound.BaseSound;
 
   constructor(scene: Phaser.Scene) {
@@ -26,6 +28,8 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
 
     scene.add.existing(this);
     scene.physics.add.existing(this);
+
+    this.enemy = this.scene.enemy;
 
     //arthur run
     this.createAnims();
@@ -58,7 +62,7 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
 
     // Arthur weapon
     //  Creates 3 bullets, using the 'bullet' graphic
-    this.weapon = this.scene.add.weapon(100, 'bullet');
+    this.weapon = this.scene.add.weapon(1, 'bullet');
 
     // Enable physics debugging for the bullets
     this.weapon.debugPhysics = true;
@@ -82,6 +86,16 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
 
 
 
+    // githit
+
+    // this.scene.physics.add.overlap(
+    //   this,
+    //   this.enemy.weapon.bullets,
+    //   (arthur: Arthur, bullet) => {
+    //     arthur.getsHit(arthur, bullet);
+    //     this.is_killed = true;
+    //   }
+    // );
   }
 
   // preUpdate(time: number, delta: number) {
@@ -172,21 +186,34 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
     arthur.gun.destroy();
   }
 
-  moveForward() {
-    if (this.x <= 1000) {
-      this.anims.play('arthur_run', true);
-      // this.visible = true;
-      this.x += 5;
-      this.y = 500;
+  // moveForward() {
+  //   if (this.x <= 1000) {
+  //     this.anims.play('arthur_run', true);
+  //     // this.visible = true;
+  //     this.x += 5;
+  //     this.y = 500;
 
-      // FIXME: TOTAL HACK!
-      this.scene.physics.world.bounds.width += 5;
+  //     // FIXME: TOTAL HACK!
+  //     this.scene.physics.world.bounds.width += 5;
 
-      // this.visible = false;
-      this.gun.visible = false;
-      return;
-    }
+  //     // this.visible = false;
+  //     this.gun.visible = false;
+  //     return;
+  //   }
 
+  //   this.canMoveForward = false;
+
+  //   this.anims.play('arthur_stand', true);
+
+  //   this.y = 485;
+  //   this.gun.x = this.x - 20;
+  //   this.fireLine.x = this.gun.x;
+  //   this.gun.visible = true;
+  //   this.gunTween.resume();
+  // }
+
+
+  stopRun(){
     this.canMoveForward = false;
 
     this.anims.play('arthur_stand', true);
@@ -197,4 +224,5 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
     this.gun.visible = true;
     this.gunTween.resume();
   }
+
 }
