@@ -4,6 +4,7 @@ import Preloader from './scenes/PreloaderScene';
 import Level1Scene from './scenes/Level1Scene';
 import GamestartScene from './scenes/GameStartScene';
 import GameoverScene from './scenes/GameOverScene';
+import ChapterClearScene from './scenes/ChapterClearScene';
 
 const config = {
   type: Phaser.AUTO,
@@ -17,10 +18,10 @@ const config = {
     default: 'arcade',
     arcade: {
       gravity: { y: 0 },
-      debug: true,
+      debug: false,
     },
   },
-  scene: [Preloader, GamestartScene, Level1Scene, GameoverScene],
+  scene: [Preloader, GamestartScene, Level1Scene, GameoverScene, ChapterClearScene],
 };
 
 new Phaser.Game(config);

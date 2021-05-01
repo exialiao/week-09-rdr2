@@ -6,6 +6,10 @@ export default class PreloaderScene extends Phaser.Scene {
   preload() {
     this.load.image('title', 'assets/img/title.png');
     this.load.image('start', 'assets/img/start.png');
+    this.load.image('dead', 'assets/img/dead.png');
+    this.load.image('restart', 'assets/img/restart.png');
+    this.load.image('playAgain', 'assets/img/playagain.png');
+    this.load.image('nextChapter', 'assets/img/nextchapter.png');
 
     this.load.image('background', 'assets/img/background.png');
     this.load.image('sun', 'assets/img/sun.png');
@@ -18,12 +22,20 @@ export default class PreloaderScene extends Phaser.Scene {
     this.load.image('roadsign', 'assets/img/roadsign.png');
     this.load.image('bg_horse', 'assets/img/bg_horse.png');
     this.load.image('carriage', 'assets/img/carriage.png');
-    
+
     this.load.image('tent', 'assets/img/tent.png');
     this.load.image('tree', 'assets/img/tree.png');
     this.load.image('ground', 'assets/img/ground.png');
-
+    this.load.image('farm2', 'assets/img/farm2.png');
+    this.load.image('town', 'assets/img/town.png');
     this.load.image('miss_area', 'assets/img/miss_area.png');
+
+    // box
+    this.load.image('box1', 'assets/img/box1.png');
+    this.load.image('box2', 'assets/img/box2.png');
+    this.load.image('box3', 'assets/img/box3.png');
+    this.load.image('box4', 'assets/img/box4.png');
+    this.load.image('box5', 'assets/img/box5.png');
 
     //arthur
 
@@ -54,6 +66,7 @@ export default class PreloaderScene extends Phaser.Scene {
     // enemy
     this.load.image('enemy1_body', 'assets/img/enemy/enemy1_body.png');
     this.load.image('enemy1_gun', 'assets/img/enemy/enemy1_gun.png');
+    this.load.image('soldier', 'assets/img/enemy/soldier.png');
 
     // audio
 

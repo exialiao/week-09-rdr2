@@ -1,7 +1,7 @@
 import { Weapon } from 'phaser3-weapon-plugin';
 import Arthur from './arthur';
 
-export default class Enemy extends Phaser.GameObjects.Sprite {
+export default class Soldier extends Phaser.GameObjects.Sprite {
   physics: any;
 
   gun: Phaser.GameObjects.Sprite;
@@ -11,20 +11,17 @@ export default class Enemy extends Phaser.GameObjects.Sprite {
   is_killed: boolean = false;
   can_shoot: boolean = false;
   arthur: Arthur;
-  shot_sound: any;
   gun_smoke: Phaser.GameObjects.Particles.ParticleEmitterManager;
+  shot_sound: Phaser.Sound.BaseSound;
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
     // super(Level1Scene, 1000, 485, config.key);
-    super(scene, x, y, 'enemy1_body');
+    super(scene, x, y, 'soldier');
 
     scene.add.existing(this);
     scene.physics.add.existing(this);
 
     this.arthur = this.scene.arthur;
-
-    // enemy
-    this.gun = scene.add.sprite(x - 50, y - 40, 'enemy1_gun');
 
     // enemy weapon
 
@@ -33,13 +30,11 @@ export default class Enemy extends Phaser.GameObjects.Sprite {
     this.weapon.bulletAngleOffset = 90;
     this.weapon.bulletSpeed = 2000;
 
-    this.gunTopLeft = this.gun.getTopLeft();
-
     this.scene.physics.add.overlap(
       this,
       this.arthur.weapon.bullets,
-      (enemy: Enemy, bullet) => {
-        enemy.getsHit(enemy, bullet);
+      (soldier: Soldier, bullet) => {
+        soldier.getsHit(soldier, bullet);
         this.arthur.canMoveForward = true;
       }
     );
@@ -50,17 +45,17 @@ export default class Enemy extends Phaser.GameObjects.Sprite {
   preUpdate(time, delta) {
     super.preUpdate(time, delta);
 
-    this.enemyFire();
+    this.soldierFire();
   }
 
   // enemey shot
-  enemyFire() {
+  soldierFire() {
     if (this.can_shoot != true) {
       return;
     }
     setTimeout(() => {
       this.weapon.fireAngle = -180;
-      this.weapon.fire(this.gunTopLeft, undefined, undefined, 0, 0);
+      this.weapon.fire(this, undefined, undefined, -55, -30);
       this.shot_sound.play();
       // gun smoke
       this.gun_smoke = this.scene.add.particles('gun_smoke');
@@ -77,18 +72,18 @@ export default class Enemy extends Phaser.GameObjects.Sprite {
         blendMode: 'ADD',
         frequency: 110,
         maxParticles: 5,
-        x: this.gunTopLeft.x,
-        y: this.gunTopLeft.y,
+        x: this.x - 55,
+        y: this.y - 30,
       });
     }, 500);
     this.can_shoot = false;
   }
 
-  getsHit(enemy, bullet) {
+  getsHit(soldier, bullet) {
     bullet.kill();
-    enemy.gun.destroy();
-    enemy.can_shoot = false;
-    enemy.is_killed = true;
-    enemy.destroy();
+
+    soldier.can_shoot = false;
+    soldier.is_killed = true;
+    soldier.destroy();
   }
 }

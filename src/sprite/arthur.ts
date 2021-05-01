@@ -146,7 +146,6 @@ export default class Arthur extends Phaser.GameObjects.Sprite {
     // we say we can fire when the fire line is not visible
     if (!this.fireLine.visible) {
       this.fireLine.visible = true;
-
       this.fireLine.angle = this.gun.angle;
 
       this.scene.time.addEvent({

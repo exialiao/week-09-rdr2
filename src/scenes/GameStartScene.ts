@@ -8,10 +8,11 @@ export default class Gamestart extends Phaser.Scene {
   mountain2: Phaser.GameObjects.TileSprite;
   mountain3a: Phaser.GameObjects.Image;
   farm: Phaser.GameObjects.Image;
-  mountain3b: any;
+
   background_music: Phaser.Sound.BaseSound;
   ground: Phaser.Types.Physics.Arcade.ImageWithDynamicBody;
   title: Phaser.GameObjects.Image;
+  mountain3: Phaser.GameObjects.Image;
   constructor() {
     super('gamestart');
   }
@@ -32,7 +33,7 @@ export default class Gamestart extends Phaser.Scene {
     this.cloud = this.add.tileSprite(0, 0, 1440, 600, 'cloud').setOrigin(0, 0);
     this.cloud.setScrollFactor(0);
 
-    this.mountain1 = this.add.image(0, 330, 'mountain_1').setOrigin(0, 0);
+    this.mountain1 = this.add.image(0, 340, 'mountain_1').setOrigin(0, 0);
     this.mountain1.setScrollFactor(0.05);
 
     this.mountain2 = this.add
@@ -40,10 +41,9 @@ export default class Gamestart extends Phaser.Scene {
       .setOrigin(0, 0);
     this.mountain2.setScrollFactor(0.1);
 
-    this.mountain3a = this.add.image(20, 470, 'mountain_3a').setOrigin(0, 0);
-    this.mountain3a.setScrollFactor(0.2);
-    this.mountain3b = this.add.image(900, 445, 'mountain_3b').setOrigin(0, 0);
-    this.mountain3b.setScrollFactor(0.2);
+    this.mountain3 = this.add.image(20, 470, 'mountain_3').setOrigin(0, 0);
+    this.mountain3.setScrollFactor(0.2);
+
 
     this.farm = this.add.image(870, 475, 'farm').setOrigin(0, 0);
     this.farm.setScrollFactor(0.45);
@@ -74,9 +74,7 @@ export default class Gamestart extends Phaser.Scene {
       .setOrigin(0, 0)
       .setScrollFactor(0);
 
-    this.background_music = this.sound.add('background_music');
 
-    this.background_music.play();
   }
 
   update() {

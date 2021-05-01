@@ -54,28 +54,21 @@ export default class Gameover extends Phaser.Scene {
     // this.add.image(400, 400, 'bg_horse').setOrigin(0, 0).setScrollFactor(0.85);
     // this.add.image(550, 100, 'tree').setOrigin(0, 0).setScrollFactor(0.75);
 
-    this.title = this.add.image(330, 100, 'title').setOrigin(0, 0);
-    this.title.setScale(0.7);
+    this.title = this.add.image(500, 100, 'dead').setOrigin(0, 0);
+    this.title.setScale(1);
 
     this.startButton = this.add
-      .image(635, 400, 'start')
+      .image(635, 400, 'nextchapter')
       .setOrigin(0, 0)
       .setScale(0.5);
 
     this.startButton.setInteractive();
 
+    this.startButton.on('pointerdown', () => {
+      this.scene.start('level-1');
+    }); // Start the main game.
 
-     this.startButton.on('pointerdown', () =>{
-              this.scene.start('level-1');}); // Start the main game.
-
-    this.ground = this.physics.add
-      .image(0, 550, 'ground')
-      .setOrigin(0, 0)
-      .setScrollFactor(0);
-
-    this.background_music = this.sound.add('background_music');
-
-    this.background_music.play();
+    this.cameras.main.fadeIn(2500, 255, 0, 0);
   }
 
   update() {
