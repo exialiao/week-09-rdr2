@@ -13,12 +13,12 @@ export default class PreloaderScene extends Phaser.Scene {
     this.load.image('cloud', 'assets/img/cloud.png');
     this.load.image('mountain_1', 'assets/img/mountain_1.png');
     this.load.image('mountain_2', 'assets/img/mountain_2.png');
-    this.load.image('mountain_3a', 'assets/img/mountain_3a.png');
-    this.load.image('mountain_3b', 'assets/img/mountain_3b.png');
+    this.load.image('mountain_3', 'assets/img/mountain_3.png');
     this.load.image('farm', 'assets/img/farm.png');
     this.load.image('roadsign', 'assets/img/roadsign.png');
     this.load.image('bg_horse', 'assets/img/bg_horse.png');
     this.load.image('carriage', 'assets/img/carriage.png');
+    
     this.load.image('tent', 'assets/img/tent.png');
     this.load.image('tree', 'assets/img/tree.png');
     this.load.image('ground', 'assets/img/ground.png');

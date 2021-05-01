@@ -12,9 +12,9 @@ export default class Enemy extends Phaser.GameObjects.Sprite {
   can_shoot: boolean = false;
   arthur: Arthur;
 
-  constructor(scene: Phaser.Scene, x: number) {
+  constructor(scene: Phaser.Scene, x: number, y:number) {
     // super(Level1Scene, 1000, 485, config.key);
-    super(scene, x, 485, 'enemy1_body');
+    super(scene, x, y, 'enemy1_body');
 
     scene.add.existing(this);
     scene.physics.add.existing(this);
@@ -22,7 +22,7 @@ export default class Enemy extends Phaser.GameObjects.Sprite {
     this.arthur = this.scene.arthur;
 
     // enemy
-    this.gun = scene.add.sprite(x - 50, 445, 'enemy1_gun');
+    this.gun = scene.add.sprite(x - 50, y-40, 'enemy1_gun');
 
     // enemy weapon
 
