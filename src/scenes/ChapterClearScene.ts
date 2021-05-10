@@ -2,7 +2,8 @@ export default class ChapterClearScene extends Phaser.Scene {
   cursors: Phaser.Types.Input.Keyboard.CursorKeys;
   ground: Phaser.Types.Physics.Arcade.ImageWithDynamicBody;
   nextButton: Phaser.GameObjects.Image;
-  playAgainButton: any;
+  playAgainButton: Phaser.GameObjects.Image;
+
   constructor() {
     super('chapterclear');
   }

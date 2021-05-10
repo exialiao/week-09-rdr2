@@ -12,13 +12,13 @@ export default class Level1Scene extends Phaser.Scene {
   gunTween: Phaser.Tweens.Tween;
   gunAngle: number;
   weapon: any;
-  gunTopRight: any;
+
 
   cloud: Phaser.GameObjects.TileSprite;
   birds: Phaser.GameObjects.TileSprite;
   mountain2: Phaser.GameObjects.TileSprite;
   moveBackground: boolean;
-  cursors: any;
+ 
   controlConfig: {
     camera: Phaser.Cameras.Scene2D.Camera;
     left: any;
@@ -315,7 +315,6 @@ export default class Level1Scene extends Phaser.Scene {
     this.cameras.main.startFollow(this.arthur);
     this.cameras.main.setFollowOffset(-420, 0);
 
-
     // music
 
     this.background_music = this.sound.add('background_music');
@@ -393,7 +392,6 @@ export default class Level1Scene extends Phaser.Scene {
 
       setTimeout(() => {
         this.scene.pause('level-1');
-
         this.scene.launch('chapterclear');
       }, 4000);
 

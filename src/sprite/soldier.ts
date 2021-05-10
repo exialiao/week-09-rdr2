@@ -2,11 +2,8 @@ import { Weapon } from 'phaser3-weapon-plugin';
 import Arthur from './arthur';
 
 export default class Soldier extends Phaser.GameObjects.Sprite {
-  physics: any;
-
   gun: Phaser.GameObjects.Sprite;
   weapon: Weapon;
-  gunTopLeft: any;
 
   is_killed: boolean = false;
   can_shoot: boolean = false;
